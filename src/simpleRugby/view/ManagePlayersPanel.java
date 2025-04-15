@@ -14,7 +14,8 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import simpleRugby.controler.ManagePlayersPanelController;
+import simpleRugby.controler.ManagePlayersController;
+
 
 /**
  * ManagePlayersPanel is the GUI panel where a coach can view list of players.
@@ -71,7 +72,7 @@ public class ManagePlayersPanel extends JPanel {
 	    panel.add(scrollPane);
 
 	    // load data into table via controller
-	    new ManagePlayersPanelController(this);
+	    new ManagePlayersController(this);
 	}
 
 

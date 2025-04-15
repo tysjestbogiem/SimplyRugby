@@ -12,13 +12,13 @@ import simpleRugby.view.ManagePlayersPanel;
  * to the view so it can be shown in a table (JTable).
  */
 
-public class ManagePlayersPanelController {
+public class ManagePlayersController {
 
-    private ManagePlayersPanel view; // the panel that shows the list of players
+    private ManagePlayersPanel myManagePlayersPanel; // the panel that shows the list of players
 
     // constructor takes view and loads players into it
-    public ManagePlayersPanelController(ManagePlayersPanel view) {
-        this.view = view;
+    public ManagePlayersController(ManagePlayersPanel myManagePlayersPanel) {
+        this.myManagePlayersPanel = myManagePlayersPanel;
         loadPlayers(); // call this straight away so the table is filled
     }
 
@@ -28,7 +28,7 @@ public class ManagePlayersPanelController {
         List<Object[]> players = ManagePlayersPanelDAO.getAllPlayers();
         
         // send the data to view to show in JTable
-        view.populateTable(players);
+        myManagePlayersPanel.populateTable(players);
 
         // for debugging – print the number of players loaded
         // System.out.println("Loaded players: " + players.size());

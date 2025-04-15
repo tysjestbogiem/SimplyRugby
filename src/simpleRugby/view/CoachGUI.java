@@ -3,6 +3,8 @@ package simpleRugby.view;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import simpleRugby.controler.SkillDevelopmentController;
 import simpleRugby.model.CoachController;
 
 /**
@@ -23,6 +25,10 @@ public class CoachGUI extends JFrame {
     public CoachGUI(CoachController coachController) {
         setTitle("Coach View");
         this.myCoachController = coachController;
+        
+        SkillDevelopmentPanel skillPanel = new SkillDevelopmentPanel();
+        new SkillDevelopmentController(skillPanel);
+
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -102,7 +108,7 @@ public class CoachGUI extends JFrame {
         mainPanel = new JPanel(cardLayout);
 
         mainPanel.add(new ManagePlayersPanel(), "Manage Players");
-        mainPanel.add(new SkillDevelopmentPanel(), "Skill Development");
+        mainPanel.add(skillPanel, "Skill Development");
         mainPanel.add(new TrainingRecordPanel(), "Training Record");
         mainPanel.add(new MatchPerformancePanel(), "Match Performance");
         mainPanel.add(new ViewMatchHistoryPanel(), "View Match History");
@@ -120,6 +126,7 @@ public class CoachGUI extends JFrame {
                 cardLayout.show(mainPanel, "Skill Development");
             }
         });
+
 
         btnTrainingRecord.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
