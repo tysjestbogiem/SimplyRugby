@@ -20,11 +20,11 @@ import config.CommonConstraints;
  * This class supports the ManagePlayersPanel in the view layer, supplying it with data to display.
  */
 
-public class ManagePlayersPanelDAO {
+public class ManagePlayersDAO {
 	
 	// gets a list of all players from the database
-	public static List<Object[]> getAllPlayers() {
-	    List<Object[]> players = new ArrayList<>();
+	public static List<Player> getAllPlayers() {
+	    List<Player> players = new ArrayList<>();
 
 	    try (Connection connection = DriverManager.getConnection(
 	            CommonConstraints.DB_URL,
@@ -32,20 +32,24 @@ public class ManagePlayersPanelDAO {
 	            CommonConstraints.DB_PASSWORD)) {
 
 	    	// prepare the statement to avoid SQL injection
-	        PreparedStatement statement  = connection.prepareStatement(
-	        		// SQL to fetch first name, surname, and squad from the members_info table
-	        		"SELECT first_name, surname, squad FROM members_info");
-	        
+	    	PreparedStatement statement = connection.prepareStatement(
+	                "SELECT m.first_name, m.surname, t.team_name " +
+	                "FROM member m " +
+	                "INNER JOIN player p ON m.id = p.id " +
+	                "INNER JOIN team t ON p.team_id = t.id"
+	            );
 	        // run query and get the result set
 	        ResultSet resultSet = statement.executeQuery();
 
 	        // loop through result set and collect data
 	        while (resultSet.next()) {
-	        	players.add(new Object[] {
-	        			resultSet.getString("first_name"),
-	        			resultSet.getString("surname"),
-	        			resultSet.getString("squad")
-	        		});
+                Player player = new Player();
+                player.setFirstName(resultSet.getString("first_name"));
+                player.setSurname(resultSet.getString("surname"));
+                player.setTeamName(resultSet.getString("team_name"));
+                
+
+                players.add(player); 
 	        }
 
 	    } catch (SQLException e) {

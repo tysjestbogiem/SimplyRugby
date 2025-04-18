@@ -23,15 +23,6 @@ import javax.swing.border.EmptyBorder;
 import simpleRugby.controler.RegisterController;
 import simpleRugby.model.StaffRole;
 
-
-/**
- * RegisterPanel is form where a Member Secretary can register new users.
- * 
- * It collects the user's first name, surname, and role, and allows for generating
- * a username and default password. Once generated, the Register button becomes enabled.
- * The layout uses GroupLayout to arrange components vertically in a clean structure.
- */
-
 public class RegisterPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -41,20 +32,21 @@ public class RegisterPanel extends JPanel {
     private JComboBox<StaffRole> cmbStaffRole;
     private JButton btnRegister;
 
-    // Constructor sets up the form and links it with the controller
     public RegisterPanel(RegisterController registerController) {
         this.myRegisterController = registerController;
-
+        
+        
+        
         // panel settings
         setBackground(SystemColor.activeCaption);
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(40, 40, 20, 20));
 
-        // subpanel to hold the form components.
+        // subpanel to hold the form components
         JPanel mainPanel = new JPanel();
         mainPanel.setBackground(SystemColor.activeCaption);
         
-        // Create form components.
+        // form components
         JLabel lblRegister = new JLabel("Register New User");
         lblRegister.setFont(new Font("SansSerif", Font.BOLD, 18));
         
@@ -88,12 +80,14 @@ public class RegisterPanel extends JPanel {
                 String surname = txtSurname.getText();
                 myRegisterController.generateLogin(name, surname);
                 
+                
             }
         });
         
         btnRegister = new JButton("Register");
         btnRegister.setForeground(SystemColor.inactiveCaption);
         btnRegister.setEnabled(false);
+        //btnRegister.setForeground(SystemColor.inactiveCaption);
         btnRegister.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		registerController.createNewUser();
@@ -103,9 +97,9 @@ public class RegisterPanel extends JPanel {
         btnRegister.setBackground(SystemColor.activeCaption);
         btnRegister.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnRegister.setFont(new Font("SansSerif", Font.BOLD, 16));
-        // Future registration logic can be added here.
         
-        // Build layout using GroupLayout.
+        
+        // layout using GroupLayout.
         GroupLayout gl = new GroupLayout(mainPanel);
         gl.setHorizontalGroup(
         	gl.createParallelGroup(Alignment.LEADING)
@@ -146,26 +140,28 @@ public class RegisterPanel extends JPanel {
         gl.setAutoCreateGaps(true);
         gl.setAutoCreateContainerGaps(true);
         
-        // adds the subpanel (the form) to this panel.
+        // subpanel (the form) to this panel
         add(mainPanel, BorderLayout.CENTER);
     }
     
-    // returns selected role as a string
+    // helper method to turn staff roles into string 
     public String getSelectedRole() {
         return cmbStaffRole.getSelectedItem().toString();
     }
 
-
-    // pops up a dialog with a message
+    
+    // helper method to display messages
     public int displayMessage(String message) {
         return JOptionPane.showConfirmDialog(
             this, message, "Generated Login", JOptionPane.OK_CANCEL_OPTION
         );
     }
 
-    // enables the "Register" button once the login has been successfully generated
+
+    // helper method to enable registration button
     public void enableRegisterButton() {
         btnRegister.setEnabled(true);
+
     }
 
 

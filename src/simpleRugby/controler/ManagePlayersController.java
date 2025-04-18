@@ -1,7 +1,9 @@
 package simpleRugby.controler;
 
 import java.util.List;
-import simpleRugby.model.ManagePlayersPanelDAO;
+
+import simpleRugby.model.ManagePlayersDAO;
+import simpleRugby.model.Player;
 import simpleRugby.view.ManagePlayersPanel;
 
 /**
@@ -18,6 +20,7 @@ public class ManagePlayersController {
 
     // constructor takes view and loads players into it
     public ManagePlayersController(ManagePlayersPanel myManagePlayersPanel) {
+    	
         this.myManagePlayersPanel = myManagePlayersPanel;
         loadPlayers(); // call this straight away so the table is filled
     }
@@ -25,7 +28,7 @@ public class ManagePlayersController {
     // Loads all players from database and updates table in the view
     public void loadPlayers() {
         // get list of players from ManagePlayersPanelDAO
-        List<Object[]> players = ManagePlayersPanelDAO.getAllPlayers();
+        List<Player> players = ManagePlayersDAO.getAllPlayers();
         
         // send the data to view to show in JTable
         myManagePlayersPanel.populateTable(players);

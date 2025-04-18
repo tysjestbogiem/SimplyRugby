@@ -4,8 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import simpleRugby.controler.ManagePlayersController;
 import simpleRugby.controler.SkillDevelopmentController;
 import simpleRugby.model.CoachController;
+import simpleRugby.view.*;
 
 /**
  * CoachGUI is main screen shown to users with the Coach role.
@@ -21,6 +23,7 @@ public class CoachGUI extends JFrame {
     private CoachController myCoachController;
     private CardLayout cardLayout;
     private JPanel mainPanel;
+    private JPanel logo;
 
     public CoachGUI(CoachController coachController) {
         setTitle("Coach View");
@@ -28,6 +31,11 @@ public class CoachGUI extends JFrame {
         
         SkillDevelopmentPanel skillPanel = new SkillDevelopmentPanel();
         new SkillDevelopmentController(skillPanel);
+        
+     
+        ManagePlayersPanel playersPanel = new ManagePlayersPanel();
+        new ManagePlayersController(playersPanel);
+
 
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,23 +48,23 @@ public class CoachGUI extends JFrame {
         sidePanel.setPreferredSize(new Dimension(200, 0)); // consistent width
 
         // logo panel
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
-        panel.setPreferredSize(new Dimension(200, 80));
+        logo = new JPanel();
+        logo.setLayout(null);
+        logo.setPreferredSize(new Dimension(200, 80));
 
         JLabel lblNewLabel = new JLabel("Simply Rugby");
         lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
         lblNewLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
         lblNewLabel.setBounds(10, 20, 180, 30);
-        panel.add(lblNewLabel);
+        logo.add(lblNewLabel);
 
         JLabel lblCoach = new JLabel("Coach");
         lblCoach.setHorizontalAlignment(SwingConstants.CENTER);
         lblCoach.setFont(new Font("SansSerif", Font.PLAIN, 14));
         lblCoach.setBounds(10, 50, 180, 30);
-        panel.add(lblCoach);
+        logo.add(lblCoach);
 
-        sidePanel.add(panel);
+        sidePanel.add(logo);
 
         // buttons 
         JButton btnManagePlayers = new JButton("Manage Players");
@@ -107,7 +115,7 @@ public class CoachGUI extends JFrame {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
-        mainPanel.add(new ManagePlayersPanel(), "Manage Players");
+        mainPanel.add(playersPanel, "Manage Players");
         mainPanel.add(skillPanel, "Skill Development");
         mainPanel.add(new TrainingRecordPanel(), "Training Record");
         mainPanel.add(new MatchPerformancePanel(), "Match Performance");
