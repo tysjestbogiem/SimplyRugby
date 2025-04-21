@@ -12,6 +12,11 @@ public class Member {
 	private MembershipType membershipType;
 	
 	
+	public String getFullName() {
+	    return firstName + " " + surname;
+	}
+
+
 	public int getMemberId() {
 		return memberId;
 	}
@@ -63,6 +68,9 @@ public class Member {
 		this.membershipType = membershipType;
 	}
 	
-	
+	@Override
+	public String toString() {
+	    return firstName + " " + surname;
+	}
 
 }

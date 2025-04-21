@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
@@ -64,20 +65,29 @@ public class LoginGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH); // full-screen mode
         getContentPane().setLayout(new BorderLayout());
+        
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
         setContentPane(contentPane);
         contentPane.setLayout(new BorderLayout(0, 0));
         
         JPanel loginPanel = new JPanel();
         loginPanel.setBackground(SystemColor.controlHighlight);
-        loginPanel.setPreferredSize(new Dimension(800, 1000));
+        loginPanel.setPreferredSize(new Dimension(450, 500));
         
         JPanel centerWrapper = new JPanel(new GridBagLayout());
         centerWrapper.setBackground(SystemColor.window); 
-        centerWrapper.add(loginPanel);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        centerWrapper.add(loginPanel, gbc);
+
+        //centerWrapper.add(loginPanel);
         contentPane.add(centerWrapper, BorderLayout.CENTER);
+
 
         
         txtUsername = new JTextField();

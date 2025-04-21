@@ -35,7 +35,7 @@ public class LoginDAO {
 			
 			// prepare a SQL query that checks if the username and password match a row
 			PreparedStatement validateUser = connection.prepareStatement(
-				"SELECT * FROM user_info WHERE username = ? AND password = ?"
+				"SELECT * FROM staff WHERE username = ? AND password = ?"
 			);
 			
 			// plug in the values into the placeholders (to avoid SQL injection)
@@ -58,5 +58,35 @@ public class LoginDAO {
 		// if nothing matched or something went wrong, return false
 		return retVal;
 	}
+	
+	
+	public static String getRoleByUsername(String username) {
+	    String role = null;
+	    
+	    try {
+	        Connection connection = DriverManager.getConnection(
+	            CommonConstraints.DB_URL,
+	            CommonConstraints.DB_USER,
+	            CommonConstraints.DB_PASSWORD
+	        );
+	        
+	        PreparedStatement getRole = connection.prepareStatement(
+	            "SELECT staff_role FROM staff WHERE username = ?"
+	        );
+	        
+	        getRole.setString(1, username);
+	        ResultSet resultSet = getRole.executeQuery();
+	        
+	        if (resultSet.next()) {
+	            role = resultSet.getString("staff_role");
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return role;
+	}
+
 }
 

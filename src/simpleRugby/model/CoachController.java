@@ -1,22 +1,18 @@
 package simpleRugby.model;
 
+
 import simpleRugby.view.CoachGUI;
 
 public class CoachController {
 	
 	private CoachGUI coachGUI;
 	
-	
-	public CoachController() {
-		
-		coachGUI = new CoachGUI(this);
+	public CoachController(CoachGUI coachGUI) {
+		this.coachGUI = coachGUI;
 	}
 	
 	public void openCoachView() {
-		
 		coachGUI.setVisible(true);
-		
 	}
-	
-
 }
+

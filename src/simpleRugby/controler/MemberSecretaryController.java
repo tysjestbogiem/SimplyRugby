@@ -17,9 +17,10 @@ public class MemberSecretaryController {
 
     private MemberSecretaryGUI memberSecretaryGUI; // main view for Member Secretary
 
-    // constructor sets everything up when this controller is created
-    public MemberSecretaryController() {
-        
+
+
+    public MemberSecretaryController(MemberSecretaryGUI memberSecretaryGUI) {
+
     	// new RegisterController so the secretary can use registration features
         RegisterController registerController = new RegisterController();
         
@@ -28,9 +29,13 @@ public class MemberSecretaryController {
         
         // shows GUI to the user
         memberSecretaryGUI.setVisible(true);
-    }
+	}
 
-    // setter method to access the GUI if needed elsewhere
+	public MemberSecretaryController() {
+		// TODO Auto-generated constructor stub
+	}
+
+	// setter method to access the GUI if needed elsewhere
     public MemberSecretaryGUI getMemberSecretaryGUI() {
         return memberSecretaryGUI;
     }

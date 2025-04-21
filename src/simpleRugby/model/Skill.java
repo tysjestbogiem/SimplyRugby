@@ -1,40 +1,41 @@
 package simpleRugby.model;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class Skill {
 	
-    private int playerId;
-    private LocalDate trainingDate;
-    private String category;
-    private String name;
+	private int playerId;
+	private Date trainingDate;
+    private String skillCategory;
+    private String skillName;
     private int level;
     private String comment;
     
     
-	public int getPlayerId() {
-		return playerId;
+    public Skill(int playerId, Date trainingDate, String skillCategory, String skillName, int level, String comment) {
+        this.playerId = playerId;         
+        this.trainingDate = trainingDate; 
+        this.skillCategory = skillCategory;
+        this.skillName = skillName;
+        this.level = level;
+        this.comment = comment;
+    }
+
+
+	public String getSkillCategory() {
+		return skillCategory;
 	}
-	public void setPlayerId(int playerId) {
-		this.playerId = playerId;
+
+	public void setSkillCategory(String skillCategory) {
+		this.skillCategory = skillCategory;
 	}
-	public LocalDate getTrainingDate() {
-		return trainingDate;
+
+	public String getSkillName() {
+		return skillName;
 	}
-	public void setTrainingDate(LocalDate trainingDate) {
-		this.trainingDate = trainingDate;
-	}
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category = category;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
+	public void setSkillName(String skillName) {
+		this.skillName = skillName;
 	}
 	public int getLevel() {
 		return level;
@@ -49,6 +50,26 @@ public class Skill {
 		this.comment = comment;
 	}
 
+
+	public Date getTrainingDate() {
+	    return trainingDate; 
+	}
+
+	public void setTrainingDate(Date trainingDate) {
+		this.trainingDate = trainingDate;
+	}
+
+	public int getPlayerId() {
+		return playerId;
+	}
+
+	public void setPlayerId(int playerId) {
+		this.playerId = playerId;
+	}
+
+
+
+	
     
 }
 

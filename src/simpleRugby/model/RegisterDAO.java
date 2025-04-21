@@ -68,7 +68,7 @@ public class RegisterDAO {
 
 			// prepare a query to search for username
 			PreparedStatement checkUserExists = connection.prepareStatement(
-				"SELECT * FROM user_info WHERE username = ?"
+				"SELECT * FROM staff WHERE username = ?"
 			);
 
 			// plug in username to the query

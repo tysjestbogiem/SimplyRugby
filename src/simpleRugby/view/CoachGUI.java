@@ -7,6 +7,7 @@ import javax.swing.*;
 import simpleRugby.controler.ManagePlayersController;
 import simpleRugby.controler.SkillDevelopmentController;
 import simpleRugby.model.CoachController;
+import simpleRugby.model.SkillDevelopmentDAO;
 import simpleRugby.view.*;
 
 /**
@@ -25,14 +26,18 @@ public class CoachGUI extends JFrame {
     private JPanel mainPanel;
     private JPanel logo;
 
-    public CoachGUI(CoachController coachController) {
+    public CoachGUI() {
+    	
+    	
+
         setTitle("Coach View");
-        this.myCoachController = coachController;
+        //this.myCoachController = coachController;
         
         SkillDevelopmentPanel skillPanel = new SkillDevelopmentPanel();
-        new SkillDevelopmentController(skillPanel);
-        
-     
+        SkillDevelopmentDAO skillModel = new SkillDevelopmentDAO();
+        SkillDevelopmentController skillController = new SkillDevelopmentController(skillModel, skillPanel);
+        skillPanel.setSkillDevelopmentController(skillController);
+
         ManagePlayersPanel playersPanel = new ManagePlayersPanel();
         new ManagePlayersController(playersPanel);
 

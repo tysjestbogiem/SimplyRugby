@@ -45,7 +45,7 @@ public class SkillDevelopmentDAO {
     }
 
     
-    public static void saveSkills(int playerId, LocalDate trainingDate, List<Skill> skills) {
+    public static void saveSkills(List<Skill> skills) {
 
         try (Connection connection = DriverManager.getConnection(
                 CommonConstraints.DB_URL,
@@ -53,19 +53,30 @@ public class SkillDevelopmentDAO {
                 CommonConstraints.DB_PASSWORD)) {
 
             PreparedStatement addSkill = connection.prepareStatement(
-                    "INSERT INTO player_skills (player_id, training_date, category, skill_name, skill_level, comment) " +
+                    "INSERT INTO skill (player_id, training_date, category, skill_name, skill_level, comment) " +
                     "VALUES (?, ?, ?, ?, ?, ?)"
             );
 
             for (Skill skill : skills) {
-                addSkill.setInt(1, playerId);
-                addSkill.setDate(2, Date.valueOf(trainingDate));
-                addSkill.setString(3, skill.getCategory());
-                addSkill.setString(4, skill.getName());
+                addSkill.setInt(1, skill.getPlayerId());
+                addSkill.setDate(2, new java.sql.Date(skill.getTrainingDate().getTime()));
+                addSkill.setString(3, skill.getSkillCategory());
+                addSkill.setString(4, skill.getSkillName());
                 addSkill.setInt(5, skill.getLevel());
                 addSkill.setString(6, skill.getComment());
                 addSkill.addBatch(); // add multiple skills at once
+                
+                System.out.println("Saving skill:");
+                System.out.println("Player ID: " + skill.getPlayerId());
+                System.out.println("Training Date: " + new java.sql.Date(skill.getTrainingDate().getTime()));
+                System.out.println("Skill Category: " + skill.getSkillCategory());
+                System.out.println("Skill Name: " + skill.getSkillName());
+                System.out.println("Skill Level: " + skill.getLevel());
+                System.out.println("Comment: " + skill.getComment());
             }
+            
+            
+
 
             addSkill.executeBatch(); // execute all in one go
             addSkill.close();
@@ -77,10 +88,7 @@ public class SkillDevelopmentDAO {
     }
 
 
-	public static int getPlayerIdByName(String selectedPlayerName) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+
     
     
 }

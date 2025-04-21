@@ -230,7 +230,11 @@ public class MemberSecretaryGUI extends JFrame {
      contentPane.add(mainPanel, BorderLayout.CENTER);
      }
  
-     // helper method to switch between panels
+     public MemberSecretaryGUI() {
+	// TODO Auto-generated constructor stub
+}
+
+	// helper method to switch between panels
      public void showCard(String cardName) {
          cardLayout.show(mainPanel, cardName); // switches visible card in mainPanel
      }

@@ -40,11 +40,11 @@ public class Main {
 
         // start controller 
         EventQueue.invokeLater(() -> {
-            //LoginController myLoginController = new LoginController();
+            LoginController myLoginController = new LoginController();
         	//MemberSecretaryController myMemberSecretaryController = new MemberSecretaryController(); 
         	//new MemberSecretary(); // Launch the application
             
-            CoachController myCoachController = new CoachController();
+            //CoachController myCoachController = new CoachController();
         	
         	//System.out.println(MyJDBC.checkUser("mardul"));
         	

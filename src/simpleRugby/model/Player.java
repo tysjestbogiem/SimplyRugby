@@ -48,5 +48,12 @@ public class Player extends Member{
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
 	}
+	
+	@Override
+	public String toString() {
+	    return getFullName(); 
+	}
+
+
 
 }
