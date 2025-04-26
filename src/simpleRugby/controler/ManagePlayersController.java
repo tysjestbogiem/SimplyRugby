@@ -4,6 +4,7 @@ import java.util.List;
 
 import simpleRugby.model.ManagePlayersDAO;
 import simpleRugby.model.Player;
+import simpleRugby.model.SessionManager;
 import simpleRugby.view.ManagePlayersPanel;
 
 /**
@@ -28,7 +29,8 @@ public class ManagePlayersController {
     // Loads all players from database and updates table in the view
     public void loadPlayers() {
         // get list of players from ManagePlayersPanelDAO
-        List<Player> players = ManagePlayersDAO.getAllPlayers();
+    	int loggedUserId = SessionManager.getUserId();
+        List<Player> players = ManagePlayersDAO.getAllPlayers(loggedUserId);
         
         // send the data to view to show in JTable
         myManagePlayersPanel.populateTable(players);

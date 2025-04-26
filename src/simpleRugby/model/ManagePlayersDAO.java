@@ -23,7 +23,7 @@ import config.CommonConstraints;
 public class ManagePlayersDAO {
 	
 	// gets a list of all players from the database
-	public static List<Player> getAllPlayers() {
+	public static List<Player> getAllPlayers(int coachId) {
 	    List<Player> players = new ArrayList<>();
 
 	    try (Connection connection = DriverManager.getConnection(
@@ -33,11 +33,15 @@ public class ManagePlayersDAO {
 
 	    	// prepare the statement to avoid SQL injection
 	    	PreparedStatement statement = connection.prepareStatement(
-	                "SELECT m.first_name, m.surname, t.team_name " +
+	                "SELECT m.id, m.first_name, m.surname, t.team_name, p.position " +
 	                "FROM member m " +
 	                "INNER JOIN player p ON m.id = p.id " +
-	                "INNER JOIN team t ON p.team_id = t.id"
+	                "INNER JOIN team t ON p.team_id = t.id " +
+	                "WHERE t.coach_id = ?"
 	            );
+
+	        statement.setInt(1, coachId); // set the coach id dynamically
+
 	        // run query and get the result set
 	        ResultSet resultSet = statement.executeQuery();
 
@@ -47,6 +51,7 @@ public class ManagePlayersDAO {
                 player.setFirstName(resultSet.getString("first_name"));
                 player.setSurname(resultSet.getString("surname"));
                 player.setTeamName(resultSet.getString("team_name"));
+                player.setPosition(resultSet.getString("position"));
                 
 
                 players.add(player); 
@@ -59,5 +64,8 @@ public class ManagePlayersDAO {
 	    // return the list of players (could be empty if no results or something failed)
 	    return players;
 	}
+	
+	
+
 
 }

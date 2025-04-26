@@ -25,7 +25,10 @@ import java.util.Map;
 
 import simpleRugby.controler.SkillDevelopmentController;
 import simpleRugby.model.Player;
+import simpleRugby.model.SessionManager;
 import simpleRugby.model.Skill;
+import simpleRugby.model.Squad;
+import simpleRugby.model.SquadDAO;
 
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JDayChooser;
@@ -35,18 +38,18 @@ public class SkillDevelopmentPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     
     private SkillDevelopmentController mySkillDevelopmentController;
-    
+//    private List<ButtonGroup> allButtonGroups = new ArrayList<>();
+//    private List<JTextArea> allCommentAreas = new ArrayList<>();
+
     private JComboBox<Player> cmbPlayers;
     private JTable table;
-    private Border blackBorder;
-    
     private JRadioButton rbtStandard_1;
     private JRadioButton rbtStandard_2;
     private JRadioButton rbtStandard_3;
     private JRadioButton rbtStandard_4;
     private JRadioButton rbtStandard_5;
     private JTextArea txtCommentPassing;
-    private JTextArea txtSummary;
+    private JTextArea txtSummary = new JTextArea();
     private JDateChooser trainingDate;
     private List<JRadioButton> spinButtons = new ArrayList<>();
     private List<JRadioButton> popButtons = new ArrayList<>();
@@ -58,117 +61,34 @@ public class SkillDevelopmentPanel extends JPanel {
     private List<JRadioButton> puntButtons = new ArrayList<>();
     private List<JRadioButton> grubberButtons = new ArrayList<>();
     private List<JRadioButton> goalButtons = new ArrayList<>();
-
 	private JTextArea txtCommentStandard;
-
 	private JTextArea txtCommentSpin;
-
 	private JTextArea txtCommentPop;
-
 	private JTextArea txtCommentFront;
-
 	private JTextArea txtCommentRear;
-
 	private JTextArea txtCommentSide;
-
 	private JTextArea txtCommentScrabble;
-
 	private JTextArea txtCommentDrop;
-
 	private JTextArea txtCommentPunt;
-	
+	private JTextArea txtCommentGrubber;
+	private JTextArea txtCommentGoal;
+	private ButtonGroup standardGroup;
+	private ButtonGroup spinGroup;
+	private ButtonGroup popGroup;
+	private ButtonGroup frontGroup;
+	private ButtonGroup rearGroup;
+	private ButtonGroup sideGroup;
+	private ButtonGroup scrabbleGroup;
+	private ButtonGroup dropGroup;
+	private ButtonGroup puntGroup;
+	private ButtonGroup grubberGroup;
+	private ButtonGroup goalGroup;
+
 
 
 	public void setMySkillDevelopmentController(SkillDevelopmentController mySkillDevelopmentController) {
 		this.mySkillDevelopmentController = mySkillDevelopmentController;
 	}
-
-	public void setCmbPlayers(JComboBox<Player> cmbPlayers) {
-		this.cmbPlayers = cmbPlayers;
-	}
-
-	public void setTable(JTable table) {
-		this.table = table;
-	}
-
-	public void setBlackBorder(Border blackBorder) {
-		this.blackBorder = blackBorder;
-	}
-
-	public void setRbtStandard_1(JRadioButton rbtStandard_1) {
-		this.rbtStandard_1 = rbtStandard_1;
-	}
-
-	public void setRbtStandard_2(JRadioButton rbtStandard_2) {
-		this.rbtStandard_2 = rbtStandard_2;
-	}
-
-	public void setRbtStandard_3(JRadioButton rbtStandard_3) {
-		this.rbtStandard_3 = rbtStandard_3;
-	}
-
-	public void setRbtStandard_4(JRadioButton rbtStandard_4) {
-		this.rbtStandard_4 = rbtStandard_4;
-	}
-
-	public void setRbtStandard_5(JRadioButton rbtStandard_5) {
-		this.rbtStandard_5 = rbtStandard_5;
-	}
-
-	public void setTrainingDate(JDateChooser trainingDate) {
-		this.trainingDate = trainingDate;
-	}
-
-	public void setSpinButtons(List<JRadioButton> spinButtons) {
-		this.spinButtons = spinButtons;
-	}
-
-	public void setPopButtons(List<JRadioButton> popButtons) {
-		this.popButtons = popButtons;
-	}
-
-	public void setFrontButtons(List<JRadioButton> frontButtons) {
-		this.frontButtons = frontButtons;
-	}
-
-	public void setRearButtons(List<JRadioButton> rearButtons) {
-		this.rearButtons = rearButtons;
-	}
-
-	public void setSideButtons(List<JRadioButton> sideButtons) {
-		this.sideButtons = sideButtons;
-	}
-
-	public void setScrabbleButtons(List<JRadioButton> scrabbleButtons) {
-		this.scrabbleButtons = scrabbleButtons;
-	}
-
-	public void setDropButtons(List<JRadioButton> dropButtons) {
-		this.dropButtons = dropButtons;
-	}
-
-	public void setPuntButtons(List<JRadioButton> puntButtons) {
-		this.puntButtons = puntButtons;
-	}
-
-	public void setGrubberButtons(List<JRadioButton> grubberButtons) {
-		this.grubberButtons = grubberButtons;
-	}
-
-	public void setGoalButtons(List<JRadioButton> goalButtons) {
-		this.goalButtons = goalButtons;
-	}
-
-
-	private JTextArea txtCommentGrubber;
-
-	private JTextArea txtCommentGoal;
-
-
-    
-
-    
-
 
     public SkillDevelopmentPanel() {
     	
@@ -187,11 +107,9 @@ public class SkillDevelopmentPanel extends JPanel {
 
         // === Top Panel (form area) ===
         JPanel topPanel = new JPanel();
+        GridBagLayout gbl_topPanel = new GridBagLayout();
         topPanel.setLayout(new GridBagLayout());
         topPanel.setBackground(Color.LIGHT_GRAY);
-
-        
-        GridBagLayout gbl_topPanel = new GridBagLayout();
         gbl_topPanel.columnWidths = new int[]{454, 245, 0};
         gbl_topPanel.rowHeights = new int[]{30, 30, 30, 0};
         gbl_topPanel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
@@ -207,8 +125,13 @@ public class SkillDevelopmentPanel extends JPanel {
                                         gbc_lblTitle.gridy = 0;
                                         topPanel.add(lblTitle, gbc_lblTitle);
                         
-                                JLabel lblPlayers = new JLabel("Team name");
+                                JLabel lblPlayers = new JLabel();
                                 lblPlayers.setFont(new Font("SansSerif", Font.PLAIN, 16));
+                                String teamName = SquadDAO.getSquadNameByCoach(SessionManager.getUserId());
+                                lblPlayers.setText("Team: " + teamName);
+
+
+
                                 GridBagConstraints gbc_lblPlayers = new GridBagConstraints();
                                 gbc_lblPlayers.fill = GridBagConstraints.BOTH;
                                 gbc_lblPlayers.insets = new Insets(0, 0, 20, 10);
@@ -257,8 +180,7 @@ public class SkillDevelopmentPanel extends JPanel {
                                 System.out.println("Selected Date: " + dateStr);
                                 mySkillDevelopmentController.updateSummary("Training Date", dateStr);
                             }
-                        });
-//                        
+                        });              
   
 
                 trainingDate.getCalendarButton().setBounds(200, 0, 45, 30);
@@ -764,7 +686,7 @@ public class SkillDevelopmentPanel extends JPanel {
         gbc_rbtStandard_5.fill = GridBagConstraints.NONE; 
         tablePanel.add(rbtStandard_5 , gbc_rbtStandard_5);
         
-        ButtonGroup standardGroup = new ButtonGroup();
+        standardGroup = new ButtonGroup();
         standardGroup.add(rbtStandard_1);
         standardGroup.add(rbtStandard_2);
         standardGroup.add(rbtStandard_3);
@@ -772,7 +694,7 @@ public class SkillDevelopmentPanel extends JPanel {
         standardGroup.add(rbtStandard_5);
         
         // radiobuttons for spin
-        ButtonGroup spinGroup = new ButtonGroup();
+        spinGroup = new ButtonGroup();
 
         // loop to create 5 radio buttons for Spin
         for (int i = 0; i < 5; i++) {
@@ -804,7 +726,7 @@ public class SkillDevelopmentPanel extends JPanel {
         
         
         // radiobuttons for pop
-        ButtonGroup popGroup = new ButtonGroup();
+        popGroup = new ButtonGroup();
 
         // loop to create 5 radio buttons for Spin
         for (int i = 0; i < 5; i++) {
@@ -834,7 +756,7 @@ public class SkillDevelopmentPanel extends JPanel {
         }
         
      // radiobuttons for spin
-        ButtonGroup frontGroup = new ButtonGroup();
+        frontGroup = new ButtonGroup();
 
         // loop to create 5 radio buttons for Spin
         for (int i = 0; i < 5; i++) {
@@ -864,7 +786,7 @@ public class SkillDevelopmentPanel extends JPanel {
         }
         
         // radiobuttons for rear >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        ButtonGroup rearGroup = new ButtonGroup();
+        rearGroup = new ButtonGroup();
 
         // loop to create 5 radio buttons for Spin
         for (int i = 0; i < 5; i++) {
@@ -894,7 +816,7 @@ public class SkillDevelopmentPanel extends JPanel {
         }
         
         // radio buttons for side >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        ButtonGroup sideGroup = new ButtonGroup();
+        sideGroup = new ButtonGroup();
 
         // loop to create 5 radio buttons for Spin
         for (int i = 0; i < 5; i++) {
@@ -924,7 +846,7 @@ public class SkillDevelopmentPanel extends JPanel {
         }
         
         	// radio buttons for scrabble >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-           ButtonGroup scrabbleGroup = new ButtonGroup();
+           scrabbleGroup = new ButtonGroup();
 
            // loop to create 5 radio buttons for Spin
            for (int i = 0; i < 5; i++) {
@@ -954,7 +876,7 @@ public class SkillDevelopmentPanel extends JPanel {
            }
            
            // radio buttons for drop >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-           ButtonGroup dropGroup = new ButtonGroup();
+           dropGroup = new ButtonGroup();
 
            // loop to create 5 radio buttons for Spin
            for (int i = 0; i < 5; i++) {
@@ -984,7 +906,7 @@ public class SkillDevelopmentPanel extends JPanel {
            }
            
         // radio buttons for drop >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-           ButtonGroup puntGroup = new ButtonGroup();
+           puntGroup = new ButtonGroup();
 
            // loop to create 5 radio buttons for Spin
            for (int i = 0; i < 5; i++) {
@@ -1014,7 +936,7 @@ public class SkillDevelopmentPanel extends JPanel {
            }
            
         // radio buttons for drop >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-           ButtonGroup grubberGroup = new ButtonGroup();
+           grubberGroup = new ButtonGroup();
 
            // loop to create 5 radio buttons for Spin
            for (int i = 0; i < 5; i++) {
@@ -1044,7 +966,7 @@ public class SkillDevelopmentPanel extends JPanel {
            }
            
         // radio buttons for drop >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-           ButtonGroup goalGroup = new ButtonGroup();
+           goalGroup = new ButtonGroup();
 
            // loop to create 5 radio buttons for Spin
            for (int i = 0; i < 5; i++) {
@@ -1210,7 +1132,6 @@ public class SkillDevelopmentPanel extends JPanel {
         JLabel lblSummary = new JLabel("Summary", SwingConstants.CENTER);
         lblSummary.setFont(new Font("SansSerif", Font.BOLD, 16));
 
-        setTxtSummary(new JTextArea());
         getTxtSummary().setLineWrap(true);
         getTxtSummary().setWrapStyleWord(true);
         getTxtSummary().setFont(new Font("SansSerif", Font.PLAIN, 14));
@@ -1236,11 +1157,14 @@ public class SkillDevelopmentPanel extends JPanel {
         btnSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	
-            	mySkillDevelopmentController.saveSkill();
+                mySkillDevelopmentController.saveSkill();
 
+                clearForm(); 
+                JOptionPane.showMessageDialog(SkillDevelopmentPanel.this, "Data saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE); // <<< NEW
+                txtSummary.setText("");
             }
         });
+
 
         
         displayPanel.add(btnSave, BorderLayout.SOUTH);
@@ -1256,8 +1180,6 @@ public class SkillDevelopmentPanel extends JPanel {
 
     public void updateSummary() {
 		Player selectedPlayer = (Player) cmbPlayers.getSelectedItem();
-		
-		
 	}
 
 
@@ -1518,6 +1440,41 @@ public class SkillDevelopmentPanel extends JPanel {
 
 	public void setTxtCommentGoal(String txtCommentGoal) {
 	    this.txtCommentGoal.setText(txtCommentGoal);
+	}
+
+
+	
+	public void clearForm() {
+	    // clear text areas
+	    txtCommentStandard.setText("");
+	    txtCommentSpin.setText("");
+	    txtCommentPop.setText("");
+	    txtCommentFront.setText("");
+	    txtCommentRear.setText("");
+	    txtCommentSide.setText("");
+	    txtCommentScrabble.setText("");
+	    txtCommentDrop.setText("");
+	    txtCommentPunt.setText("");
+	    txtCommentGrubber.setText("");
+	    txtCommentGoal.setText("");
+
+	    // reset training date
+	    trainingDate.setDate(new Date());
+
+	    // radio button groups, if button is not marked (null) dont clear it
+	    if (standardGroup != null) standardGroup.clearSelection();
+	    if (spinGroup != null) spinGroup.clearSelection();
+	    if (popGroup != null) popGroup.clearSelection();
+	    if (frontGroup != null) frontGroup.clearSelection();
+	    if (rearGroup != null) rearGroup.clearSelection();
+	    if (sideGroup != null) sideGroup.clearSelection();
+	    if (scrabbleGroup != null) scrabbleGroup.clearSelection();
+	    if (dropGroup != null) dropGroup.clearSelection();
+	    if (puntGroup != null) puntGroup.clearSelection();
+	    if (grubberGroup != null) grubberGroup.clearSelection();
+	    if (goalGroup != null) goalGroup.clearSelection();
+
+
 	}
 
 

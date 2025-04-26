@@ -5,8 +5,10 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import simpleRugby.controler.ManagePlayersController;
+import simpleRugby.controler.PlayerPerformanceController;
 import simpleRugby.controler.SkillDevelopmentController;
 import simpleRugby.model.CoachController;
+import simpleRugby.model.PlayerPerformanceDAO;
 import simpleRugby.model.SkillDevelopmentDAO;
 import simpleRugby.view.*;
 
@@ -40,7 +42,11 @@ public class CoachGUI extends JFrame {
 
         ManagePlayersPanel playersPanel = new ManagePlayersPanel();
         new ManagePlayersController(playersPanel);
-
+        
+        PlayerPerformancePanel playerPerformancePanel = new PlayerPerformancePanel();
+        PlayerPerformanceController playerPerformanceController = new PlayerPerformanceController(playerPerformancePanel);
+        playerPerformancePanel.setMyPlayerPerformanceController(playerPerformanceController);
+        playerPerformanceController.displayPlayers();
 
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,7 +55,7 @@ public class CoachGUI extends JFrame {
 
         // side panel
         JPanel sidePanel = new JPanel();
-        sidePanel.setLayout(new GridLayout(9, 1)); // all buttons same height
+        sidePanel.setLayout(new GridLayout(10, 1)); // all buttons same height
         sidePanel.setPreferredSize(new Dimension(200, 0)); // consistent width
 
         // logo panel
@@ -81,6 +87,11 @@ public class CoachGUI extends JFrame {
         btnSkillDevelopment.setMnemonic(KeyEvent.VK_S);
         btnSkillDevelopment.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnSkillDevelopment.setFont(new Font("SansSerif", Font.BOLD, 14));
+        
+        JButton btnPlayerPerformance = new JButton("Player Performance");
+        btnPlayerPerformance.setMnemonic(KeyEvent.VK_S);
+        btnPlayerPerformance.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnPlayerPerformance.setFont(new Font("SansSerif", Font.BOLD, 14));
 
         JButton btnTrainingRecord = new JButton("Training Record");
         btnTrainingRecord.setMnemonic(KeyEvent.VK_T);
@@ -110,6 +121,7 @@ public class CoachGUI extends JFrame {
         // adds buttons to side panel
         sidePanel.add(btnManagePlayers);
         sidePanel.add(btnSkillDevelopment);
+        sidePanel.add(btnPlayerPerformance);
         sidePanel.add(btnTrainingRecord);
         sidePanel.add(btnMatchPerformance);
         sidePanel.add(btnViewMatchHistory);
@@ -122,6 +134,7 @@ public class CoachGUI extends JFrame {
 
         mainPanel.add(playersPanel, "Manage Players");
         mainPanel.add(skillPanel, "Skill Development");
+        mainPanel.add(playerPerformancePanel, "Player Performance");
         mainPanel.add(new TrainingRecordPanel(), "Training Record");
         mainPanel.add(new MatchPerformancePanel(), "Match Performance");
         mainPanel.add(new ViewMatchHistoryPanel(), "View Match History");
@@ -139,8 +152,13 @@ public class CoachGUI extends JFrame {
                 cardLayout.show(mainPanel, "Skill Development");
             }
         });
-
-
+        
+        btnPlayerPerformance.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(mainPanel, "Player Performance");
+            }
+        });
+        
         btnTrainingRecord.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(mainPanel, "Training Record");

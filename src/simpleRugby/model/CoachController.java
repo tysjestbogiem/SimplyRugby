@@ -10,7 +10,8 @@ public class CoachController {
 	public CoachController(CoachGUI coachGUI) {
 		this.coachGUI = coachGUI;
 	}
-	
+
+
 	public void openCoachView() {
 		coachGUI.setVisible(true);
 	}

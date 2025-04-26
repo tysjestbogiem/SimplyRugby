@@ -8,6 +8,7 @@ public class Player extends Member{
 	private String doctorTel;
 	private String helthIssues;
 	private String teamName;
+	private String position;
 	
 	
 	public String getNextOfKin() {
@@ -52,6 +53,14 @@ public class Player extends Member{
 	@Override
 	public String toString() {
 	    return getFullName(); 
+	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
 	}
 
 

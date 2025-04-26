@@ -45,10 +45,15 @@ public class LoginDAO {
 			// run the query and get the results
 			ResultSet resultSet = validateUser.executeQuery();
 			
-			// if there's any data returned, that means login is valid
-			if (resultSet.isBeforeFirst()) {
-				return true;
-			}
+			if (resultSet.next()) {
+	            int id = resultSet.getInt("id");
+	            String role = resultSet.getString("staff_role");
+
+	            // save login session
+	            SessionManager.setUserSession(id, username, role);
+
+	            retVal = true; // login successful
+	        }
 			
 		} catch (SQLException e) {
 			// if there's any problem with database stuff, print it to the console

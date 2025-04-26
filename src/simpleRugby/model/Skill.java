@@ -11,6 +11,7 @@ public class Skill {
     private String skillName;
     private int level;
     private String comment;
+    private String trainingDateChanged;
     
     
     public Skill(int playerId, Date trainingDate, String skillCategory, String skillName, int level, String comment) {
@@ -21,6 +22,11 @@ public class Skill {
         this.level = level;
         this.comment = comment;
     }
+
+
+	public Skill() {
+		// TODO Auto-generated constructor stub
+	}
 
 
 	public String getSkillCategory() {
@@ -50,7 +56,6 @@ public class Skill {
 		this.comment = comment;
 	}
 
-
 	public Date getTrainingDate() {
 	    return trainingDate; 
 	}
@@ -65,6 +70,14 @@ public class Skill {
 
 	public void setPlayerId(int playerId) {
 		this.playerId = playerId;
+	}
+
+	public String getTrainingDateChanged() {
+		return trainingDateChanged;
+	}
+
+	public void setTrainingDateChanged(String trainingDateChanged) {
+		this.trainingDateChanged = trainingDateChanged;
 	}
 
 

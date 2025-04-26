@@ -17,7 +17,8 @@ import javax.swing.table.DefaultTableModel;
 
 import simpleRugby.controler.ManagePlayersController;
 import simpleRugby.model.Player;
-
+import simpleRugby.model.SessionManager;
+import simpleRugby.model.SquadDAO;
 
 /**
  * ManagePlayersPanel is the GUI panel where a coach can view list of players.
@@ -55,8 +56,10 @@ public class ManagePlayersPanel extends JPanel {
         
         topPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 50, 0));
 
-        JLabel lblTeam = new JLabel("Teams name");
+        JLabel lblTeam = new JLabel();
         lblTeam.setFont(new Font("SansSerif", Font.BOLD, 16));
+        String teamName = SquadDAO.getSquadNameByCoach(SessionManager.getUserId());
+        lblTeam.setText("Team: " + teamName);
         topPanel.add(lblTeam);
 
         JLabel lblPlayers = new JLabel("Players");
@@ -67,10 +70,16 @@ public class ManagePlayersPanel extends JPanel {
 
         // Table setup
         model = new DefaultTableModel();
-        String col[] = {"Name", "Surname", "Team"};
+        String col[] = {"Name", "Surname", "Team", "Position"};
         model.setColumnIdentifiers(col);
 
-        table = new JTable(model);
+        table = new JTable(model) {
+        	@Override
+            public boolean isCellEditable(int row, int column) {
+                // only column 4 is editable
+                return column == 4; 
+            }
+        };
         table.setFillsViewportHeight(true);
         table.setAutoCreateRowSorter(true); // table sorting
         JScrollPane scrollPane = new JScrollPane(table);
@@ -87,7 +96,8 @@ public class ManagePlayersPanel extends JPanel {
             model.addRow(new Object[]{
                 player.getFirstName(),
                 player.getSurname(),
-                player.getTeamName()
+                player.getTeamName(),
+                player.getPosition()
             });
         }
     }

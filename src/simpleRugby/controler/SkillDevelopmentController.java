@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 
 import simpleRugby.model.Player;
+import simpleRugby.model.SessionManager;
 import simpleRugby.model.Skill;
 import simpleRugby.model.SkillDevelopmentDAO;
 import simpleRugby.view.SkillDevelopmentPanel;
@@ -54,9 +55,15 @@ public class SkillDevelopmentController {
 
     
     public void displayPlayers() {
-        List<Player> players = SkillDevelopmentDAO.getPlayersCmb();
-        mySkillDevelopmentPanel.populateCmb(players);
+    	
+    	int loggedUserId = SessionManager.getUserId();
+    	List<Player> players = SkillDevelopmentDAO.getPlayersCmb(loggedUserId);
+    	mySkillDevelopmentPanel.populateCmb(players);
     }
+    
+	 public void getTeamName() {
+	    	
+	    }
     
     public void updateSummary(String fieldName, String value) {
         if (summaryData.containsKey(fieldName)) {
@@ -149,6 +156,9 @@ public class SkillDevelopmentController {
 	    } else {
 	        JOptionPane.showMessageDialog(null, "No skills selected to save.", "No Skills", JOptionPane.INFORMATION_MESSAGE);
 	    }
+	    
+	    mySkillDevelopmentPanel.clearForm();  // or controller clears view
+	    mySkillDevelopmentPanel.getTxtSummary().setText("");
 
     }
     
@@ -167,6 +177,9 @@ public class SkillDevelopmentController {
         mySkillDevelopmentPanel.getTxtSummary().setText(builder.toString());  
      
     }
+    
+    
+   
 
 }
 

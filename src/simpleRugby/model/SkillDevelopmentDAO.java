@@ -12,39 +12,44 @@ import config.CommonConstraints;
  */
 public class SkillDevelopmentDAO {
 
-    // returns a list of players (first name + surname) from database
-    public static List<Player> getPlayersCmb() {
-        List<Player> playersCmb = new ArrayList<>();
+	    // returns a list of players (first name + surname) from database for a given coach
+	    public static List<Player> getPlayersCmb(int coachId) {
+	        List<Player> playersCmb = new ArrayList<>();
 
-        try (Connection connection = DriverManager.getConnection(
-                CommonConstraints.DB_URL,
-                CommonConstraints.DB_USER,
-                CommonConstraints.DB_PASSWORD)) {
+	        try (Connection connection = DriverManager.getConnection(
+	                CommonConstraints.DB_URL,
+	                CommonConstraints.DB_USER,
+	                CommonConstraints.DB_PASSWORD)) {
 
-            PreparedStatement statement = connection.prepareStatement(
-                    "SELECT id, first_name, surname FROM member"
-            		// where coach is.. 
-            );
+	            PreparedStatement statement = connection.prepareStatement(
+	                "SELECT m.id, m.first_name, m.surname " +
+	                "FROM member m " +
+	                "INNER JOIN player p ON m.id = p.id " +
+	                "INNER JOIN team t ON p.team_id = t.id " +
+	                "WHERE t.coach_id = ?"
+	            );
 
-            ResultSet resultSet = statement.executeQuery();
+	            statement.setInt(1, coachId); // set the coach id dynamically
 
-            while (resultSet.next()) {
-            	 Player player = new Player();
-            	 player.setMemberId(resultSet.getInt("id"));
-                 player.setFirstName(resultSet.getString("first_name"));
-                 player.setSurname(resultSet.getString("surname"));
-                 
-                 playersCmb.add(player);
-            }
+	            ResultSet resultSet = statement.executeQuery();
 
-        } catch (SQLException e) {
-            e.printStackTrace(); // for debugging
-        }
+	            while (resultSet.next()) {
+	                Player player = new Player();
+	                player.setMemberId(resultSet.getInt("id"));
+	                player.setFirstName(resultSet.getString("first_name"));
+	                player.setSurname(resultSet.getString("surname"));
 
-        return playersCmb;
-    }
+	                playersCmb.add(player);
+	            }
 
-    
+	        } catch (SQLException e) {
+	            e.printStackTrace(); // for debugging
+	        }
+
+	        return playersCmb;
+	    }
+	
+
     public static void saveSkills(List<Skill> skills) {
 
         try (Connection connection = DriverManager.getConnection(
