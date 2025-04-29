@@ -19,12 +19,12 @@ public class CommonConstraints {
     
     
     //     // MySQL Credentials
-    public static final String DB_HOST = "localhost";
-    public static final String DB_NAME = "simply_rugby";
-    public static final String DB_USER = "root";
-    public static final String DB_PASSWORD = "";  
-
-    public static final String DB_URL = "jdbc:mysql://" + DB_HOST + ":3306/" + DB_NAME;
+//    public static final String DB_HOST = "localhost";
+//    public static final String DB_NAME = "simply_rugby";
+//    public static final String DB_USER = "root";
+//    public static final String DB_PASSWORD = "";  
+//
+//    public static final String DB_URL = "jdbc:mysql://" + DB_HOST + ":3306/" + DB_NAME;
 	
 	
 	 // MySQL Credentials - using Stuart server
@@ -34,6 +34,20 @@ public class CommonConstraints {
 //		public static final String DB_PASSWORD = "njBGV04X";  
 //		
 //		public static final String DB_URL = "jdbc:mysql://" + DB_HOST + ":3306/" + DB_NAME;
+	
+	
+	public static final String DB_HOST = "hopper.proxy.rlwy.net"; // railway public host
+	public static final String DB_PORT = "11207";                 // railway public port
+	public static final String DB_NAME = "railway";               // database name
+	public static final String DB_USER = "root";                  // user 
+	public static final String DB_PASSWORD = "eWyBaHFVujVxlxRAaOMEjHASSUTPMYca"; 
+
+	public static final String DB_URL = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME + "?useSSL=false"; // disable the warning while connecting to a database in Java
+
+	
+	
+	
+	
 }
 
 

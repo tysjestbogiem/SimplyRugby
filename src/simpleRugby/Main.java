@@ -33,7 +33,17 @@ public class Main {
 		
         try {
             
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+           // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            
+            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+
+
+
+ 
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -103,8 +103,50 @@ public class PlayerPerformanceDAO {
 
 		    return skills;
 		}
+		
+		public static List<Skill> getAllCommentsForPlayer(int playerId) {
+		    List<Skill> skills = new ArrayList<>();
+
+		    try (Connection connection = DriverManager.getConnection(
+		            CommonConstraints.DB_URL,
+		            CommonConstraints.DB_USER,
+		            CommonConstraints.DB_PASSWORD)) {
+
+		    	PreparedStatement statement = connection.prepareStatement(
+		    		    "SELECT training_date, skill_name, comment " +
+		    		    "FROM skill " +
+		    		    "WHERE player_id = ? " +    
+		    		    "ORDER BY training_date DESC"
+		    		);
+
+		        statement.setInt(1, playerId);
+
+		        ResultSet resultSet = statement.executeQuery();
+		        
+		        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy"); // formatter date
 
 
+		        while (resultSet.next()) {
+		            Skill skill = new Skill();
 
+		            Date date = resultSet.getDate("training_date");
+
+		            if (date != null) {
+		                String formattedDate = formatter.format(date);
+		                skill.setTrainingDateChanged(formattedDate); 
+		            }
+
+		            skill.setSkillName(resultSet.getString("skill_name"));
+		            skill.setComment(resultSet.getString("comment"));
+		            skills.add(skill);
+		        }
+
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+
+		    return skills;
+		}
+		
 		
 }

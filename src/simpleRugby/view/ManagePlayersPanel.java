@@ -82,6 +82,9 @@ public class ManagePlayersPanel extends JPanel {
         };
         table.setFillsViewportHeight(true);
         table.setAutoCreateRowSorter(true); // table sorting
+        table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 16));
+        table.setFont(new Font("SansSerif", Font.PLAIN, 14)); 
+        table.setRowHeight(20); 
         JScrollPane scrollPane = new JScrollPane(table);
 
         contentPanel.add(scrollPane, BorderLayout.CENTER);

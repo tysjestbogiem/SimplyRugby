@@ -127,7 +127,7 @@ public class SkillDevelopmentPanel extends JPanel {
                         
                                 JLabel lblPlayers = new JLabel();
                                 lblPlayers.setFont(new Font("SansSerif", Font.PLAIN, 16));
-                                String teamName = SquadDAO.getSquadNameByCoach(SessionManager.getUserId());
+                                String teamName = Squad.getSquadName();
                                 lblPlayers.setText("Team: " + teamName);
 
 
@@ -151,6 +151,7 @@ public class SkillDevelopmentPanel extends JPanel {
         
                 
                         cmbPlayers = new JComboBox<>();
+                        cmbPlayers.setFont(new Font("SansSerif", Font.PLAIN, 14)); 
                         cmbPlayers.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
                                 Player selectedPlayer = (Player) cmbPlayers.getSelectedItem();
@@ -1457,6 +1458,7 @@ public class SkillDevelopmentPanel extends JPanel {
 	    txtCommentPunt.setText("");
 	    txtCommentGrubber.setText("");
 	    txtCommentGoal.setText("");
+
 
 	    // reset training date
 	    trainingDate.setDate(new Date());

@@ -9,7 +9,8 @@ public class Squad {
 	private List<Player> players;
 	private List<Coach> coach;
 	
-	public String getSquadName() {
+	public static String getSquadName() {
+		String squadName = SquadDAO.getSquadNameByCoach(SessionManager.getUserId());
 		return squadName;
 	}
 	public void setSquadName(String squadName) {

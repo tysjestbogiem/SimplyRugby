@@ -43,5 +43,28 @@ public class PlayerPerformanceController {
 	        System.out.println("No player selected.");
 	    }
 	}
+	
+	public void displayComments() {
+	    int selectedPlayerId = myPlayerPerformancePanel.getSelectedPlayerId(); // get player from cmb box
+
+	    if (selectedPlayerId != -1) {
+	        List<Skill> skills = PlayerPerformanceDAO.getAllCommentsForPlayer(selectedPlayerId);
+
+	        StringBuilder commentsBuilder = new StringBuilder();
+
+	        for (Skill skill : skills) {
+	            if (skill.getComment() != null && !skill.getComment().trim().isEmpty()) {
+	                commentsBuilder.append("Date: ").append(skill.getTrainingDateChanged())
+	                               .append(" | Skill: ").append(skill.getSkillName())
+	                               .append(" | Comment: ").append(skill.getComment())
+	                               .append("\n");
+	            }
+	        }
+
+	        myPlayerPerformancePanel.getTxtComments().setText(commentsBuilder.toString());
+	    } else {
+	        System.out.println("No player selected.");
+	    }
+	}
 
 }

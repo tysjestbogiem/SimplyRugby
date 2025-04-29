@@ -14,6 +14,7 @@ import simpleRugby.model.Player;
 import simpleRugby.model.SessionManager;
 import simpleRugby.model.Skill;
 import simpleRugby.model.SkillDevelopmentDAO;
+import simpleRugby.model.SquadDAO;
 import simpleRugby.view.SkillDevelopmentPanel;
 
 /**
@@ -61,16 +62,14 @@ public class SkillDevelopmentController {
     	mySkillDevelopmentPanel.populateCmb(players);
     }
     
-	 public void getTeamName() {
-	    	
-	    }
     
-    public void updateSummary(String fieldName, String value) {
-        if (summaryData.containsKey(fieldName)) {
-            summaryData.put(fieldName, value);
-        }
-        refreshSummary();
-    }
+	 public void updateSummary(String fieldName, String value) {
+	        if (summaryData.containsKey(fieldName)) {
+	            summaryData.put(fieldName, value);
+	        }
+
+	        refreshSummary();
+	    }
 
 	
     public void saveSkill() {
@@ -159,6 +158,11 @@ public class SkillDevelopmentController {
 	    
 	    mySkillDevelopmentPanel.clearForm();  // or controller clears view
 	    mySkillDevelopmentPanel.getTxtSummary().setText("");
+	    summaryData.replaceAll((key, value) -> ""); 
+	    
+	    // update PlayerPerformancePanel
+	    
+
 
     }
     
@@ -177,7 +181,9 @@ public class SkillDevelopmentController {
         mySkillDevelopmentPanel.getTxtSummary().setText(builder.toString());  
      
     }
-    
+
+
+	
     
    
 

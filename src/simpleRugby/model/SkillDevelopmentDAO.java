@@ -85,7 +85,7 @@ public class SkillDevelopmentDAO {
 
             addSkill.executeBatch(); // execute all in one go
             addSkill.close();
-            System.out.println("Skills saved successfully.");
+            //System.out.println("Skills saved successfully.");
 
         } catch (SQLException e) {
             e.printStackTrace();

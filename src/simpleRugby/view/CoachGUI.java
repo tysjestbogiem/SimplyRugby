@@ -131,6 +131,7 @@ public class CoachGUI extends JFrame {
         // main panel 
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
+        mainPanel.setPreferredSize(new Dimension(800, 800));
 
         mainPanel.add(playersPanel, "Manage Players");
         mainPanel.add(skillPanel, "Skill Development");
