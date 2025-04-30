@@ -80,6 +80,10 @@ public class Skill {
 		this.trainingDateChanged = trainingDateChanged;
 	}
 
+	@Override
+	public String toString() {
+	    return skillName; 
+	}
 
 
 	

@@ -35,7 +35,7 @@ public class SkillPerformanceGraph extends JPanel {
             dataset
         );
         
-     // Change background colour
+        // background colour
         chart.setBackgroundPaint(Color.WHITE);
         chart.getTitle().setFont(new Font("SansSerif", Font.BOLD, 18));
         chart.getCategoryPlot().getDomainAxis().setLabelFont(new Font("SansSerif", Font.BOLD, 14));
@@ -47,15 +47,11 @@ public class SkillPerformanceGraph extends JPanel {
         chart.setAntiAlias(true);
 
 
-
-
-
-
-        // colours for each skill 
+        
         org.jfree.chart.plot.CategoryPlot plot = chart.getCategoryPlot();
         plot.setBackgroundPaint(Color.WHITE); // background
-        plot.setRangeGridlinePaint(Color.LIGHT_GRAY); // horizontal grid lines
-        plot.setDomainGridlinePaint(Color.LIGHT_GRAY); // vertical grid lines
+        plot.setRangeGridlinePaint(Color.LIGHT_GRAY); 
+        plot.setDomainGridlinePaint(Color.LIGHT_GRAY); 
         
         plot.getDomainAxis().setLabelFont(new Font("SansSerif", Font.BOLD, 14));
         plot.getRangeAxis().setLabelFont(new Font("SansSerif", Font.BOLD, 14));
@@ -70,6 +66,7 @@ public class SkillPerformanceGraph extends JPanel {
         renderer.setDrawOutlines(true);
         renderer.setUseFillPaint(true);
         
+        // colours for each skill 
         renderer.setSeriesPaint(0, java.awt.Color.RED); // standard
         renderer.setSeriesStroke(0, new BasicStroke(2.0f)); 
         renderer.setSeriesPaint(1, java.awt.Color.BLUE); // spin
@@ -97,7 +94,7 @@ public class SkillPerformanceGraph extends JPanel {
         org.jfree.chart.axis.NumberAxis yAxis = (org.jfree.chart.axis.NumberAxis) plot.getRangeAxis();
         yAxis.setStandardTickUnits(org.jfree.chart.axis.NumberAxis.createIntegerTickUnits());
 
-       // yAxis.setRange(1, 5); 
+       yAxis.setRange(1, 5); 
 
         return new ChartPanel(chart);
     }

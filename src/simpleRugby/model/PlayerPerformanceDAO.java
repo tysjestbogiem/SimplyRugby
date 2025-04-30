@@ -147,6 +147,40 @@ public class PlayerPerformanceDAO {
 
 		    return skills;
 		}
+
+
+
+
+
+		public static List<Skill> getAllSkills() {
+			List<Skill> skills = new ArrayList<>();
+
+		    try (Connection connection = DriverManager.getConnection(
+		            CommonConstraints.DB_URL,
+		            CommonConstraints.DB_USER,
+		            CommonConstraints.DB_PASSWORD)) {
+
+		    	PreparedStatement statement = connection.prepareStatement(
+		    			"SELECT DISTINCT skill_name FROM skill"
+
+		    		);
+
+
+		        ResultSet resultSet = statement.executeQuery();
+
+		        while (resultSet.next()) {
+		            Skill skill = new Skill();
+
+		            skill.setSkillName(resultSet.getString("skill_name"));
+		            skills.add(skill);
+		        }
+
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+
+		    return skills;
+		}
+	}
 		
-		
-}
+	

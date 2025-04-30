@@ -94,21 +94,25 @@ public class CoachGUI extends JFrame {
         btnPlayerPerformance.setFont(new Font("SansSerif", Font.BOLD, 14));
 
         JButton btnTrainingRecord = new JButton("Training Record");
+        btnTrainingRecord.setEnabled(false);
         btnTrainingRecord.setMnemonic(KeyEvent.VK_T);
         btnTrainingRecord.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnTrainingRecord.setFont(new Font("SansSerif", Font.BOLD, 14));
 
         JButton btnMatchPerformance = new JButton("Match Performance");
+        btnMatchPerformance.setEnabled(false);
         btnMatchPerformance.setMnemonic(KeyEvent.VK_M);
         btnMatchPerformance.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnMatchPerformance.setFont(new Font("SansSerif", Font.BOLD, 14));
 
         JButton btnViewMatchHistory = new JButton("View Match History");
+        btnViewMatchHistory.setEnabled(false);
         btnViewMatchHistory.setMnemonic(KeyEvent.VK_V);
         btnViewMatchHistory.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnViewMatchHistory.setFont(new Font("SansSerif", Font.BOLD, 14));
 
         JButton btnReassignment = new JButton("Reassignment");
+        btnReassignment.setEnabled(false);
         btnReassignment.setMnemonic(KeyEvent.VK_R);
         btnReassignment.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnReassignment.setFont(new Font("SansSerif", Font.BOLD, 14));

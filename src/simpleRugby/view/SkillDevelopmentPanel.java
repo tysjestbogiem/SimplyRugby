@@ -1202,7 +1202,7 @@ public class SkillDevelopmentPanel extends JPanel {
             return playerId;
         }
 
-        System.out.println("No player selected.");
+        //System.out.println("No player selected.");
         return -1;
     }
 
