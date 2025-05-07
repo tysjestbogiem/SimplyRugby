@@ -38,4 +38,8 @@ public class ManagePlayersController {
         // for debugging – print the number of players loaded
         // System.out.println("Loaded players: " + players.size());
     }
+    
+    public boolean positionChange(int playerId, String newPosition) {
+        return ManagePlayersDAO.updatePlayerPosition(playerId, newPosition);
+    }
 }

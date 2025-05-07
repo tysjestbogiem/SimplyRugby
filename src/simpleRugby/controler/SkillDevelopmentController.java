@@ -29,7 +29,6 @@ public class SkillDevelopmentController {
     private SkillDevelopmentPanel mySkillDevelopmentPanel;
     private SkillDevelopmentDAO mySkillDevelopmentDAO;
     private Map<String, String> summaryData = new LinkedHashMap<>();
-
     
     public SkillDevelopmentController(SkillDevelopmentDAO mySkillDevelopmentDAO, SkillDevelopmentPanel mySkillDevelopmentPanel) {
         
@@ -156,7 +155,7 @@ public class SkillDevelopmentController {
 	        JOptionPane.showMessageDialog(null, "No skills selected to save.", "No Skills", JOptionPane.INFORMATION_MESSAGE);
 	    }
 	    
-	    mySkillDevelopmentPanel.clearForm();  // or controller clears view
+	    mySkillDevelopmentPanel.clearForm();  
 	    mySkillDevelopmentPanel.getTxtSummary().setText("");
 	    summaryData.replaceAll((key, value) -> ""); 
 	    
@@ -181,11 +180,13 @@ public class SkillDevelopmentController {
         mySkillDevelopmentPanel.getTxtSummary().setText(builder.toString());  
      
     }
-
-
-	
     
-   
+    public void reset() {
+        summaryData.replaceAll((key, value) -> "");  // clear all summary data
+        mySkillDevelopmentPanel.clearForm();         // clear visible form
+    }
+
+    
 
 }
 

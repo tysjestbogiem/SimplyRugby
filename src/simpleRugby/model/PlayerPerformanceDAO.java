@@ -8,7 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import config.CommonConstraints;
 
@@ -149,9 +151,6 @@ public class PlayerPerformanceDAO {
 		}
 
 
-
-
-
 		public static List<Skill> getAllSkills() {
 			List<Skill> skills = new ArrayList<>();
 
@@ -181,6 +180,41 @@ public class PlayerPerformanceDAO {
 
 		    return skills;
 		}
+		
+		
+		public static Map<String, Double> getAverageScorePerSkill(int playerId) {
+		    Map<String, Double> averages = new HashMap<>();
+
+		    try (Connection connection = DriverManager.getConnection(
+		            CommonConstraints.DB_URL,
+		            CommonConstraints.DB_USER,
+		            CommonConstraints.DB_PASSWORD)) {
+
+		        PreparedStatement statement = connection.prepareStatement(
+		            "SELECT skill_name, AVG(skill_level) AS avg_score " +
+		            "FROM skill " +
+		            "WHERE player_id = ? " +
+		            "GROUP BY skill_name"
+		        );
+
+		        statement.setInt(1, playerId);
+		        ResultSet resultSet = statement.executeQuery();
+
+		        while (resultSet.next()) {
+		            String skillName = resultSet.getString("skill_name");
+		            double avg = resultSet.getDouble("avg_score");
+		            averages.put(skillName, avg);
+		        }
+
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+
+		    return averages;
+		}
+
+
+		
 	}
 		
 	

@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import simpleRugby.controler.LoginController;
+import simpleRugby.model.CoachController;
 
 import java.awt.SystemColor;
 import javax.swing.JLabel;
@@ -29,8 +30,10 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -49,6 +52,7 @@ public class LoginGUI extends JFrame {
 	private JPanel contentPane;
 	
 	private LoginController myLoginController;
+	private CoachController myCoachController;
 	private JTextField txtUsername;
 	private JPasswordField txtPassword;
 
@@ -110,36 +114,25 @@ public class LoginGUI extends JFrame {
         
         JButton btnLogin = new JButton("Login");
         btnLogin.setFont(new Font("SansSerif", Font.BOLD, 16));
+        
         btnLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnLogin.setBackground(SystemColor.activeCaption);
         btnLogin.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
                 String username = txtUsername.getText();
-                // character because JPaswordField used 
                 char[] passwordChars = txtPassword.getPassword(); 
-                String password = new String(passwordChars); // convert to String
+                String password = new String(passwordChars);
 
-                boolean inputValid = validateInput();
-
-                if (!inputValid) {
+                if (!validateInput()) {
                     displayMessage("Enter login and password");
                     return;
                 }
-                
-                // try to login using the controller
-                boolean result = myLoginController.handleLoginRequest(username, password);
 
-                if (result) {
-                    dispose(); // close the login window
-                } else {
-                    displayMessage("Invalid login credentials!");
-                    txtUsername.setText("");
-                    txtPassword.setText("");
-                }
+                myLoginController.loginAttempt(username, password);
             }
         });
-
+        getRootPane().setDefaultButton(btnLogin); // click enter for login button
+        
         
         JLabel lblWelcome = new JLabel("Welcome Back!");
         lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
@@ -205,12 +198,20 @@ public class LoginGUI extends JFrame {
  		
  		return retval;
  	}
-
+ 	
+ 	
 
  	// show a simple popup message to user
 	public void displayMessage(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
+	
+	// crear txt boxes once invalid input
+	public void clearFields() {
+	    txtUsername.setText("");
+	    txtPassword.setText("");
+	}
+
 
 }
 

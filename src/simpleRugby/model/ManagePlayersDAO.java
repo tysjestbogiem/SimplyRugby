@@ -48,6 +48,7 @@ public class ManagePlayersDAO {
 	        // loop through result set and collect data
 	        while (resultSet.next()) {
                 Player player = new Player();
+                player.setMemberId(resultSet.getInt("id"));
                 player.setFirstName(resultSet.getString("first_name"));
                 player.setSurname(resultSet.getString("surname"));
                 player.setTeamName(resultSet.getString("team_name"));
@@ -64,6 +65,36 @@ public class ManagePlayersDAO {
 	    // return the list of players (could be empty if no results or something failed)
 	    return players;
 	}
+	
+	
+	public static boolean updatePlayerPosition(int playerId, String newPosition) {
+	    boolean success = false;
+
+	    try (Connection connection = DriverManager.getConnection(
+	            CommonConstraints.DB_URL,
+	            CommonConstraints.DB_USER,
+	            CommonConstraints.DB_PASSWORD)) {
+
+	        PreparedStatement statement = connection.prepareStatement(
+	        		"UPDATE player " +
+	                "JOIN member ON player.id = member.id " +
+	                "SET player.position = ? " +
+	                 "WHERE member.id = ?"
+	        );
+
+	        statement.setString(1, newPosition);
+	        statement.setInt(2, playerId);
+
+	        int rowsUpdated = statement.executeUpdate();
+	        success = (rowsUpdated > 0);
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return success;
+	}
+
 	
 	
 

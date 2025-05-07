@@ -10,6 +10,7 @@ import simpleRugby.model.Skill;
 import simpleRugby.model.SkillPerformanceGraphDAO;
 import simpleRugby.view.SkillPerformanceGraph;
 
+
 public class SkillPerformanceGraphController {
 	
 	private SkillPerformanceGraphDAO mySkillPerformanceGraphDAO;
@@ -38,10 +39,6 @@ public class SkillPerformanceGraphController {
 
         return dataset;
     }
-
-
-
-
 }
        
      

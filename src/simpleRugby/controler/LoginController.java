@@ -1,5 +1,7 @@
 package simpleRugby.controler;
 
+import java.sql.SQLException;
+
 import simpleRugby.model.CoachController;
 
 import simpleRugby.model.LoginDAO;
@@ -19,23 +21,23 @@ import simpleRugby.view.MemberSecretaryGUI;
 
 public class LoginController {
 	
-	private Model myModel;
+	
 	private LoginGUI loginGUI;
+	
 	
 	// constructor
 	public LoginController() {
-		myModel = new Model();
 		loginGUI = new LoginGUI(this);
 		loginGUI.setVisible(true);
 	}
 	
 	// checks login credentials, if valid, opens correct view.
-	public boolean handleLoginRequest(String username, String password) {
+	public boolean handleLoginRequest(String username, String password) throws SQLException {
 		
 		 boolean loginSuccess = LoginDAO.validateLogin(username, password);
 
 	        if (!loginSuccess) {
-	            loginGUI.displayMessage("Login failed");
+	            //loginGUI.displayMessage("Login failed");
 	            return false;
 	        }
 
@@ -51,8 +53,8 @@ public class LoginController {
 	        loginGUI.setVisible(false); // hide login screen
 
 	        if (role.equalsIgnoreCase("Coach")) {
-	            CoachGUI coachGUI = new CoachGUI();
-	            new CoachController(coachGUI);
+	        	CoachController coachController = new CoachController(); 
+	        	CoachGUI coachGUI = new CoachGUI(coachController);      
 	            coachGUI.setVisible(true);
 
 	        } else if (role.equalsIgnoreCase("Membership Secretary")) {
@@ -67,5 +69,30 @@ public class LoginController {
 
 	        return true;
 	    }
+	
+	
+	// function to let user know what happens if login/ server issues
+	public void loginAttempt(String username, String password) {
+	    try {
+	        boolean result = handleLoginRequest(username, password);
+
+	        if (result) {
+	            loginGUI.dispose(); 
+	        } else {
+	            loginGUI.displayMessage("Invalid login credentials!");
+	            loginGUI.clearFields();
+	        }
+
+	    } catch (SQLException e) {
+	        if (e.getMessage().contains("Communications link failure") || 
+	            e.getMessage().toLowerCase().contains("connect")) {
+	            loginGUI.displayMessage("Cannot connect to the server. Try again later.");
+	        } else {
+	            loginGUI.displayMessage("A database error occurred: " + e.getMessage());
+	        }
+	        e.printStackTrace();
+	    }
+	}
+
 
 }

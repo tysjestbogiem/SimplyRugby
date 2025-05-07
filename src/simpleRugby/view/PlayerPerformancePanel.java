@@ -2,6 +2,7 @@ package simpleRugby.view;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import javax.swing.*;
@@ -30,6 +31,7 @@ public class PlayerPerformancePanel extends JPanel {
 	private SkillPerformanceGraph mySkillPerformanceGraph;
 	private SkillPerformanceGraphController mySkillPerformanceGraphController;
 	private JComboBox<Skill> cmbSkills;
+	private boolean uploadPlayers = false; // shows empty table 
 
 	public PlayerPerformancePanel() {
 
@@ -63,11 +65,16 @@ public class PlayerPerformancePanel extends JPanel {
 		cmbPlayers.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		cmbPlayers.setPreferredSize(new Dimension(200, 30));
 		cmbPlayers.addActionListener(e -> {
-			if (myPlayerPerformanceController != null) {
-				myPlayerPerformanceController.loadTable();
-				myPlayerPerformanceController.displayComments();
-			}
+		    if (!uploadPlayers) {
+		    	return; // empty table when default (empty) player
+		    }
+
+		    if (myPlayerPerformanceController != null) {
+		        myPlayerPerformanceController.loadTable();
+		        myPlayerPerformanceController.displayComments();
+		    }
 		});
+
 		topPanel.add(cmbPlayers);
 
 		contentPanel.add(topPanel, BorderLayout.NORTH);
@@ -113,6 +120,7 @@ public class PlayerPerformancePanel extends JPanel {
 		btnDisplayStatistics.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		btnDisplayStatistics.setMaximumSize(new Dimension(200, 30));
 		btnDisplayStatistics.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnDisplayStatistics.setMnemonic(KeyEvent.VK_D);
 		
 		// option one, display all skills < pure chaos
 //		btnDisplayStatistics.addActionListener((ActionEvent e) -> {
@@ -199,6 +207,7 @@ public class PlayerPerformancePanel extends JPanel {
 		for (Player player : players) {
 			cmbPlayers.addItem(player);
 		}
+		cmbPlayers.setSelectedIndex(-1);
 	}
 
 	// fill skill combo box with skill list
@@ -207,6 +216,7 @@ public class PlayerPerformancePanel extends JPanel {
 		for (Skill skill : skills) {
 			cmbSkills.addItem(skill);
 		}
+		 
 	}
 
 	// return selected player ID or -1 if none selected
@@ -223,5 +233,29 @@ public class PlayerPerformancePanel extends JPanel {
 	public JTextArea getTxtComments() {
 		return txtComments;
 	}
+
+	public void setUploadPlayers(boolean upload) {
+		this.uploadPlayers = upload;
+	}
+	
+	
+	public void clearTable() {
+		String[] columnNames = {"Skill Name"}; 
+	    Object[][] emptyData = {};
+	    DefaultTableModel emptyModel = new DefaultTableModel(emptyData, columnNames);
+	    table.setModel(emptyModel);
+	}
+	
+	public void clearComment() {
+		txtComments.setText(" ");
+	}
+	
+	public void reset() {
+	    clearTable();
+	    clearComment();
+	    cmbPlayers.setSelectedIndex(-1); 
+	}
+
+
 }
 

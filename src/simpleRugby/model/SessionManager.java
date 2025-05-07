@@ -2,6 +2,7 @@ package simpleRugby.model;
 
 
 public class SessionManager {
+	
     private static int userId;
     private static String username;
     private static String role;

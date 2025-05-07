@@ -2,6 +2,7 @@ package simpleRugby.controler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -23,17 +24,19 @@ public class PlayerPerformanceController {
 		
 	}
 
-	
-	public PlayerPerformanceController(PlayerPerformanceDAO playerPerformanceModel,
-			PlayerPerformanceDAO playerPerformanceModel2) {
+
+	public PlayerPerformanceController() {
 		// TODO Auto-generated constructor stub
 	}
+
 
 	public void displayPlayers() {
     	
     	int loggedUserId = SessionManager.getUserId();
     	List<Player> players = PlayerPerformanceDAO.getAllPlayers(loggedUserId);
     	myPlayerPerformancePanel.populateCmb(players);
+    	myPlayerPerformancePanel.setUploadPlayers(true);
+
     }
 	
 	public void displaySkills() {
@@ -43,7 +46,8 @@ public class PlayerPerformanceController {
 	
 	
 	
-	public DefaultTableModel getTableModelForSkills(List<Skill> skillList) {
+	public DefaultTableModel getTableModelForSkills(List<Skill> skillList, Map<String, Double> avgScores) {
+
 	    // get dates
 	    List<String> dateColumns = new ArrayList<>();
 	    for (Skill skill : skillList) {
@@ -62,12 +66,13 @@ public class PlayerPerformanceController {
 	    }
 	    
 	    // get column names: first column "skill name", then dates
-	    String[] columnNames = new String[dateColumns.size() + 1];
+	    String[] columnNames = new String[dateColumns.size() + 2];
 	    columnNames[0] = "Skill Name"; // first column is "skill name"
 	    // add average score here????
 	    for (int i = 0; i < dateColumns.size(); i++) {
 	        columnNames[i + 1] = dateColumns.get(i);
 	    }
+	    columnNames[columnNames.length - 1] = "Average";
 	    
 	    // create new model
 	    DefaultTableModel model = new DefaultTableModel(columnNames, 0);
@@ -93,6 +98,9 @@ public class PlayerPerformanceController {
 	                row[i + 1] = "-"; // no data
 	            }
 	        }
+	        
+	        double averageScore = avgScores.getOrDefault(skillName, 0.0);
+	        row[columnNames.length - 1] = String.format("%.2f", averageScore);
 	        model.addRow(row);
 	    }
 	    
@@ -105,10 +113,14 @@ public class PlayerPerformanceController {
 	    
 	    if (selectedPlayerId != -1) {
 	        List<Skill> skills = PlayerPerformanceDAO.getAllSkillsForPlayer(selectedPlayerId);
-	        DefaultTableModel model = getTableModelForSkills(skills);
+	        Map<String, Double> averageScore = PlayerPerformanceDAO.getAverageScorePerSkill(selectedPlayerId);
+	        DefaultTableModel model = getTableModelForSkills(skills, averageScore);
 	        myPlayerPerformancePanel.updateTableModel(model);
 	    } else {
 	        //System.out.println("No player selected.");
+	    	myPlayerPerformancePanel.clearTable();
+	    	myPlayerPerformancePanel.clearComment();
+	    	
 	    }
 	}
 	
@@ -132,6 +144,8 @@ public class PlayerPerformanceController {
 	        myPlayerPerformancePanel.getTxtComments().setText(commentsBuilder.toString());
 	    } else {
 	        //System.out.println("No player selected.");
+	    	myPlayerPerformancePanel.clearTable();
+	    	myPlayerPerformancePanel.clearComment();
 	    }
 	}
 

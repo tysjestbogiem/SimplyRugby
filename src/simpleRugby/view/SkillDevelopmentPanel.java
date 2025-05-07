@@ -1161,7 +1161,7 @@ public class SkillDevelopmentPanel extends JPanel {
                 mySkillDevelopmentController.saveSkill();
 
                 clearForm(); 
-                JOptionPane.showMessageDialog(SkillDevelopmentPanel.this, "Data saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE); // <<< NEW
+                JOptionPane.showMessageDialog(SkillDevelopmentPanel.this, "Data saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE); 
                 txtSummary.setText("");
             }
         });
@@ -1446,6 +1446,8 @@ public class SkillDevelopmentPanel extends JPanel {
 
 	
 	public void clearForm() {
+		
+		cmbPlayers.setSelectedIndex(-1);
 	    // clear text areas
 	    txtCommentStandard.setText("");
 	    txtCommentSpin.setText("");
@@ -1475,6 +1477,10 @@ public class SkillDevelopmentPanel extends JPanel {
 	    if (puntGroup != null) puntGroup.clearSelection();
 	    if (grubberGroup != null) grubberGroup.clearSelection();
 	    if (goalGroup != null) goalGroup.clearSelection();
+	    
+	    txtSummary.setText("");
+	    
+	    //mySkillDevelopmentController.clearSummaryData();
 
 
 	}

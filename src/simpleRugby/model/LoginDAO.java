@@ -20,7 +20,7 @@ public class LoginDAO {
 
 	
 	// checks username and password against user_info table in the database
-	public static boolean validateLogin(String username, String password) {
+	public static boolean validateLogin(String username, String password) throws SQLException {
 		
 		// this will be returned at the end – set to false by default
 		boolean retVal = false;
@@ -57,6 +57,7 @@ public class LoginDAO {
 			
 		} catch (SQLException e) {
 			// if there's any problem with database stuff, print it to the console
+			System.err.println("SQL Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		

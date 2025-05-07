@@ -28,12 +28,11 @@ public class CoachGUI extends JFrame {
     private JPanel mainPanel;
     private JPanel logo;
 
-    public CoachGUI() {
-    	
-    	
-
-        setTitle("Coach View");
-        //this.myCoachController = coachController;
+    public CoachGUI(CoachController controller) {
+        this.myCoachController = controller;
+       
+    
+    	setTitle("Coach View");
         
         SkillDevelopmentPanel skillPanel = new SkillDevelopmentPanel();
         SkillDevelopmentDAO skillModel = new SkillDevelopmentDAO();
@@ -41,7 +40,8 @@ public class CoachGUI extends JFrame {
         skillPanel.setSkillDevelopmentController(skillController);
 
         ManagePlayersPanel playersPanel = new ManagePlayersPanel();
-        new ManagePlayersController(playersPanel);
+        ManagePlayersController playersController = new ManagePlayersController(playersPanel);
+        playersPanel.setController(playersController);
         
         PlayerPerformancePanel playerPerformancePanel = new PlayerPerformancePanel();
         PlayerPerformanceController playerPerformanceController = new PlayerPerformanceController(playerPerformancePanel);
@@ -89,7 +89,7 @@ public class CoachGUI extends JFrame {
         btnSkillDevelopment.setFont(new Font("SansSerif", Font.BOLD, 14));
         
         JButton btnPlayerPerformance = new JButton("Player Performance");
-        btnPlayerPerformance.setMnemonic(KeyEvent.VK_S);
+        btnPlayerPerformance.setMnemonic(KeyEvent.VK_L);
         btnPlayerPerformance.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnPlayerPerformance.setFont(new Font("SansSerif", Font.BOLD, 14));
 
@@ -155,12 +155,15 @@ public class CoachGUI extends JFrame {
         btnSkillDevelopment.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(mainPanel, "Skill Development");
+                skillController.reset();
             }
         });
         
         btnPlayerPerformance.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	playerPerformancePanel.reset(); 
                 cardLayout.show(mainPanel, "Player Performance");
+                
             }
         });
         
