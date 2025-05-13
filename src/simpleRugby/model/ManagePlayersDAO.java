@@ -19,10 +19,21 @@ import config.CommonConstraints;
  * 
  * This class supports the ManagePlayersPanel in the view layer, supplying it with data to display.
  */
-
+/**
+ * 
+ */
+/**
+ * 
+ */
 public class ManagePlayersDAO {
 	
-	// gets a list of all players from the database
+	/**
+	 * Retrieves a list of all players associated with a specific coach from the database.
+	 *
+	 * @param coachId the ID of the coach whose players should be fetched
+	 * @return a list of Player objects that assign to the coach; empty list if none found or on error
+	 */
+
 	public static List<Player> getAllPlayers(int coachId) {
 	    List<Player> players = new ArrayList<>();
 
@@ -33,7 +44,7 @@ public class ManagePlayersDAO {
 
 	    	// prepare the statement to avoid SQL injection
 	    	PreparedStatement statement = connection.prepareStatement(
-	                "SELECT m.id, m.first_name, m.surname, t.team_name, p.position " +
+	                "SELECT m.id, m.first_name, m.surname, p.health_issues, p.position " +
 	                "FROM member m " +
 	                "INNER JOIN player p ON m.id = p.id " +
 	                "INNER JOIN team t ON p.team_id = t.id " +
@@ -51,7 +62,7 @@ public class ManagePlayersDAO {
                 player.setMemberId(resultSet.getInt("id"));
                 player.setFirstName(resultSet.getString("first_name"));
                 player.setSurname(resultSet.getString("surname"));
-                player.setTeamName(resultSet.getString("team_name"));
+                player.setHelthIssues(resultSet.getNString("health_issues"));
                 player.setPosition(resultSet.getString("position"));
                 
 
@@ -67,6 +78,14 @@ public class ManagePlayersDAO {
 	}
 	
 	
+	/**
+	 * Updates the position of a player in the database.
+	 * This method is used by a coach to assign a new playing position.
+	 *
+	 * @param playerId the ID of the player to update
+	 * @param newPosition the new position to assign to the player
+	 * @return true if the update was successful; false otherwise
+	 */
 	public static boolean updatePlayerPosition(int playerId, String newPosition) {
 	    boolean success = false;
 

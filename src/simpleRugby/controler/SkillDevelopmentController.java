@@ -22,22 +22,21 @@ import simpleRugby.view.SkillDevelopmentPanel;
  * It loads data from database and passes it to view.
  */
 
-
-
 public class SkillDevelopmentController {
 
     private SkillDevelopmentPanel mySkillDevelopmentPanel;
     private SkillDevelopmentDAO mySkillDevelopmentDAO;
     private Map<String, String> summaryData = new LinkedHashMap<>();
     
+    /**
+     * Constructor - sets up panel, loads players, and sets summary keys
+     */
     public SkillDevelopmentController(SkillDevelopmentDAO mySkillDevelopmentDAO, SkillDevelopmentPanel mySkillDevelopmentPanel) {
-        
     	this.mySkillDevelopmentDAO = mySkillDevelopmentDAO;
     	this.mySkillDevelopmentPanel = mySkillDevelopmentPanel;
         
         displayPlayers(); // populate combo box 
-        
-        // elements of summary in correct order
+        // setup empty elements of summary in correct order
         summaryData.put("Player", "");
         summaryData.put("Training Date", "");
         summaryData.put("Standard", "");
@@ -53,16 +52,22 @@ public class SkillDevelopmentController {
         summaryData.put("Goal", "");
     }
 
-    
+    /**
+     * Loads players for the coach into the combo box 
+     */
     public void displayPlayers() {
-    	
     	int loggedUserId = SessionManager.getUserId();
     	List<Player> players = SkillDevelopmentDAO.getPlayersCmb(loggedUserId);
     	mySkillDevelopmentPanel.populateCmb(players);
     }
     
-    
-	 public void updateSummary(String fieldName, String value) {
+    /**
+     * Updates a single field in the summary map and refreshes the display
+     * 
+     * @param fieldName
+     * @param value
+     */
+    public void updateSummary(String fieldName, String value) {
 	        if (summaryData.containsKey(fieldName)) {
 	            summaryData.put(fieldName, value);
 	        }
@@ -71,8 +76,18 @@ public class SkillDevelopmentController {
 	    }
 
 	
+    /**
+     * Saves all skill ratings entered for the selected player and date
+     */
     public void saveSkill() {
 	    int playerId = mySkillDevelopmentPanel.getSelectedPlayerId();
+	    // error message when player not chosen
+	    if (playerId == -1) {
+	        JOptionPane.showMessageDialog(null, "Please select a player!", "Missing Player", JOptionPane.ERROR_MESSAGE);
+	        return;
+	    }
+
+	    
 	    Date trainingDate = mySkillDevelopmentPanel.getTrainingDate();
 	    
 	    if (trainingDate == null) {
@@ -151,21 +166,19 @@ public class SkillDevelopmentController {
 
 	    if (!skills.isEmpty()) {
 	        SkillDevelopmentDAO.saveSkills(skills);
+	        mySkillDevelopmentPanel.clearForm();  
+		    mySkillDevelopmentPanel.getTxtSummary().setText("");
+		    summaryData.replaceAll((key, value) -> ""); // reset summary data
+		    JOptionPane.showMessageDialog(null, "Skill Saved successfully", "Info", JOptionPane.INFORMATION_MESSAGE);
 	    } else {
 	        JOptionPane.showMessageDialog(null, "No skills selected to save.", "No Skills", JOptionPane.INFORMATION_MESSAGE);
 	    }
-	    
-	    mySkillDevelopmentPanel.clearForm();  
-	    mySkillDevelopmentPanel.getTxtSummary().setText("");
-	    summaryData.replaceAll((key, value) -> ""); 
-	    
-	    // update PlayerPerformancePanel
-	    
-
 
     }
     
-    
+    /**
+     * Refreshes the summary text area with selected values
+     */
     public void refreshSummary() {
         StringBuilder builder = new StringBuilder();
 
@@ -181,12 +194,14 @@ public class SkillDevelopmentController {
      
     }
     
+    /**
+     * Refreshes the summary text area with selected values
+     */
     public void reset() {
         summaryData.replaceAll((key, value) -> "");  // clear all summary data
         mySkillDevelopmentPanel.clearForm();         // clear visible form
     }
 
-    
 
 }
 

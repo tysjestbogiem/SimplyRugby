@@ -6,6 +6,10 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * Panel to show training record details.
+ * Currently just displays a placeholder message.
+ */
 public class TrainingRecordPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -19,5 +23,4 @@ public class TrainingRecordPanel extends JPanel {
         setBackground(Color.LIGHT_GRAY); 
 
 	}
-
 }

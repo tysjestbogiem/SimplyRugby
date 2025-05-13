@@ -33,16 +33,19 @@ import simpleRugby.model.SquadDAO;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JDayChooser;
 
+/** 
+ * This is the main panel where coaches can rate player skills during training. 
+ * It includes UI elements for selecting a player, choosing a training date, rating skills, and writing comments.
+ * 
+ */
+
 public class SkillDevelopmentPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
     
+    // Controller that handles logic between the view and model
     private SkillDevelopmentController mySkillDevelopmentController;
-//    private List<ButtonGroup> allButtonGroups = new ArrayList<>();
-//    private List<JTextArea> allCommentAreas = new ArrayList<>();
-
     private JComboBox<Player> cmbPlayers;
-    private JTable table;
     private JRadioButton rbtStandard_1;
     private JRadioButton rbtStandard_2;
     private JRadioButton rbtStandard_3;
@@ -51,6 +54,8 @@ public class SkillDevelopmentPanel extends JPanel {
     private JTextArea txtCommentPassing;
     private JTextArea txtSummary = new JTextArea();
     private JDateChooser trainingDate;
+    
+    // Groups of buttons and comment fields for each skill category
     private List<JRadioButton> spinButtons = new ArrayList<>();
     private List<JRadioButton> popButtons = new ArrayList<>();
     private List<JRadioButton> frontButtons = new ArrayList<>();
@@ -65,7 +70,7 @@ public class SkillDevelopmentPanel extends JPanel {
 	private JTextArea txtCommentSpin;
 	private JTextArea txtCommentPop;
 	private JTextArea txtCommentFront;
-	private JTextArea txtCommentRear;
+	private JTextArea txtCommentRear;	
 	private JTextArea txtCommentSide;
 	private JTextArea txtCommentScrabble;
 	private JTextArea txtCommentDrop;
@@ -84,18 +89,24 @@ public class SkillDevelopmentPanel extends JPanel {
 	private ButtonGroup grubberGroup;
 	private ButtonGroup goalGroup;
 
-
-
+	/**
+	 * Sets the controller that handles the logic behind this panel.
+	 *
+	 * This lets the panel communicate with the controller to save data
+	 * or update information like the summary.
+	 *
+	 * @param mySkillDevelopmentController to connect to this panel
+	 */
 	public void setMySkillDevelopmentController(SkillDevelopmentController mySkillDevelopmentController) {
 		this.mySkillDevelopmentController = mySkillDevelopmentController;
 	}
 
     public SkillDevelopmentPanel() {
-    	
+    	// Set main panel layout and background colour
         setLayout(new BorderLayout(10, 10));
         setBackground(Color.LIGHT_GRAY);
 
-        // Content panel
+        // Content panel that holds everything
         JPanel contentPanel = new JPanel();
         GridBagLayout gbl_contentPanel = new GridBagLayout();
         gbl_contentPanel.rowWeights = new double[]{1.0, 0.0, 0.0};
@@ -115,99 +126,93 @@ public class SkillDevelopmentPanel extends JPanel {
         gbl_topPanel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
         gbl_topPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
         topPanel.setLayout(gbl_topPanel);
+        
+        JLabel lblTitle = new JLabel("Skill Development");
+        lblTitle.setFont(new Font("SansSerif", Font.BOLD, 16));
+        GridBagConstraints gbc_lblTitle = new GridBagConstraints();
+        gbc_lblTitle.fill = GridBagConstraints.BOTH;
+        gbc_lblTitle.insets = new Insets(0, 0, 20, 10);
+        gbc_lblTitle.gridx = 0;
+        gbc_lblTitle.gridy = 0;
+        topPanel.add(lblTitle, gbc_lblTitle);
                                 
-                                        JLabel lblTitle = new JLabel("Skill Development");
-                                        lblTitle.setFont(new Font("SansSerif", Font.BOLD, 16));
-                                        GridBagConstraints gbc_lblTitle = new GridBagConstraints();
-                                        gbc_lblTitle.fill = GridBagConstraints.BOTH;
-                                        gbc_lblTitle.insets = new Insets(0, 0, 20, 10);
-                                        gbc_lblTitle.gridx = 0;
-                                        gbc_lblTitle.gridy = 0;
-                                        topPanel.add(lblTitle, gbc_lblTitle);
-                        
-                                JLabel lblPlayers = new JLabel();
-                                lblPlayers.setFont(new Font("SansSerif", Font.PLAIN, 16));
-                                String teamName = Squad.getSquadName();
-                                lblPlayers.setText("Team: " + teamName);
-
-
-
-                                GridBagConstraints gbc_lblPlayers = new GridBagConstraints();
-                                gbc_lblPlayers.fill = GridBagConstraints.BOTH;
-                                gbc_lblPlayers.insets = new Insets(0, 0, 20, 10);
-                                gbc_lblPlayers.gridx = 0;
-                                gbc_lblPlayers.gridy = 1;
-                                topPanel.add(lblPlayers, gbc_lblPlayers);
-                
-                        JLabel lblTrainingDate = new JLabel("Training date:");
-                        lblTrainingDate.setFont(new Font("SansSerif", Font.PLAIN, 16));
-                        GridBagConstraints gbc_lblTrainingDate = new GridBagConstraints();
-                        gbc_lblTrainingDate.fill = GridBagConstraints.BOTH;
-                        gbc_lblTrainingDate.insets = new Insets(0, 0, 5, 0);
-                        gbc_lblTrainingDate.gridx = 1;
-                        gbc_lblTrainingDate.gridy = 1;
-                        topPanel.add(lblTrainingDate, gbc_lblTrainingDate);
-
+        JLabel lblPlayers = new JLabel();
+        lblPlayers.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        String teamName = Squad.getSquadName();
+        lblPlayers.setText("Team: " + teamName);
         
-                
-                        cmbPlayers = new JComboBox<>();
-                        cmbPlayers.setFont(new Font("SansSerif", Font.PLAIN, 14)); 
-                        cmbPlayers.addActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {
-                                Player selectedPlayer = (Player) cmbPlayers.getSelectedItem();
-                                if (selectedPlayer != null && mySkillDevelopmentController != null) {
-                                    mySkillDevelopmentController.updateSummary("Player", selectedPlayer.getFullName());
-                                }
-                            }
-                        });
-
-                        cmbPlayers.setPreferredSize(new Dimension(200, 30));
-                        GridBagConstraints gbc_cmbPlayers = new GridBagConstraints();
-                        gbc_cmbPlayers.fill = GridBagConstraints.BOTH;
-                        gbc_cmbPlayers.insets = new Insets(0, 0, 0, 5);
-                        gbc_cmbPlayers.gridx = 0;
-                        gbc_cmbPlayers.gridy = 2;
-                        topPanel.add(cmbPlayers, gbc_cmbPlayers);
+        GridBagConstraints gbc_lblPlayers = new GridBagConstraints();
+        gbc_lblPlayers.fill = GridBagConstraints.BOTH;
+        gbc_lblPlayers.insets = new Insets(0, 0, 20, 10);
+        gbc_lblPlayers.gridx = 0;
+        gbc_lblPlayers.gridy = 1;
+        topPanel.add(lblPlayers, gbc_lblPlayers);
                         
-
-                        trainingDate = new JDateChooser();
-                        trainingDate.setDate(new Date()); 
-                        trainingDate.setDateFormatString("dd-MM-yyyy");
-
-                       
-                        trainingDate.getDateEditor().addPropertyChangeListener("date", evt -> {
-                            if (trainingDate.getDate() != null) {
-                                String dateStr = new SimpleDateFormat("dd-MM-yyyy").format(trainingDate.getDate());
-                                System.out.println("Selected Date: " + dateStr);
-                                mySkillDevelopmentController.updateSummary("Training Date", dateStr);
-                            }
-                        });              
-  
-
-                trainingDate.getCalendarButton().setBounds(200, 0, 45, 30);
-                trainingDate.setDateFormatString("dd-MM-yyyy");
-                GridBagConstraints gbc_trainingDate = new GridBagConstraints();
-                gbc_trainingDate.fill = GridBagConstraints.BOTH;
-                gbc_trainingDate.gridx = 1;
-                gbc_trainingDate.gridy = 2;
-                topPanel.add(trainingDate, gbc_trainingDate);
-                trainingDate.setLayout(null);
-
-
-                GridBagConstraints gbc_topPanel = new GridBagConstraints();
-                gbc_topPanel.gridx = 0;
-                gbc_topPanel.gridy = 0;
-                gbc_topPanel.fill = GridBagConstraints.HORIZONTAL;
-                gbc_topPanel.insets = new Insets(0, 0, 10, 5);
-                contentPanel.add(topPanel, gbc_topPanel);
-
-                // === Table Panel ===
-                JPanel tablePanel = new JPanel();
-                tablePanel.setLayout(new GridBagLayout());
-                tablePanel.setBackground(Color.LIGHT_GRAY);
-
-                
+        JLabel lblTrainingDate = new JLabel("Training date:");
+        lblTrainingDate.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        GridBagConstraints gbc_lblTrainingDate = new GridBagConstraints();
+        gbc_lblTrainingDate.fill = GridBagConstraints.BOTH;
+        gbc_lblTrainingDate.insets = new Insets(0, 0, 5, 0);
+        gbc_lblTrainingDate.gridx = 1;
+        gbc_lblTrainingDate.gridy = 1;
+        topPanel.add(lblTrainingDate, gbc_lblTrainingDate);
         
+        // Player selection
+        cmbPlayers = new JComboBox<>();
+        cmbPlayers.setFont(new Font("SansSerif", Font.PLAIN, 14)); 
+        cmbPlayers.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		Player selectedPlayer = (Player) cmbPlayers.getSelectedItem();
+        		if (selectedPlayer != null && mySkillDevelopmentController != null) {
+        			mySkillDevelopmentController.updateSummary("Player", selectedPlayer.getFullName());
+        		}
+        	}
+        });
+        
+        cmbPlayers.setPreferredSize(new Dimension(200, 30));
+        GridBagConstraints gbc_cmbPlayers = new GridBagConstraints();
+        gbc_cmbPlayers.fill = GridBagConstraints.BOTH;
+        gbc_cmbPlayers.insets = new Insets(0, 0, 0, 5);
+        gbc_cmbPlayers.gridx = 0;
+        gbc_cmbPlayers.gridy = 2;
+        topPanel.add(cmbPlayers, gbc_cmbPlayers);
+        
+        
+        trainingDate = new JDateChooser();
+        trainingDate.setDate(new Date()); 
+        trainingDate.setDateFormatString("dd-MM-yyyy");
+        
+        // Training date selection with a date change listener
+        trainingDate.getDateEditor().addPropertyChangeListener("date", evt -> {
+        	if (trainingDate.getDate() != null) {
+        		String dateStr = new SimpleDateFormat("dd-MM-yyyy").format(trainingDate.getDate());
+        		//System.out.println("Selected Date: " + dateStr);
+        		mySkillDevelopmentController.updateSummary("Training Date", dateStr);
+        	}
+        });              
+        
+        trainingDate.getCalendarButton().setBounds(200, 0, 45, 30);
+        trainingDate.setDateFormatString("dd-MM-yyyy");
+        GridBagConstraints gbc_trainingDate = new GridBagConstraints();
+        gbc_trainingDate.fill = GridBagConstraints.BOTH;
+        gbc_trainingDate.gridx = 1;
+        gbc_trainingDate.gridy = 2;
+        topPanel.add(trainingDate, gbc_trainingDate);
+        //trainingDate.setLayout(null);
+        
+        
+        GridBagConstraints gbc_topPanel = new GridBagConstraints();
+        gbc_topPanel.gridx = 0;
+        gbc_topPanel.gridy = 0;
+        gbc_topPanel.fill = GridBagConstraints.HORIZONTAL;
+        gbc_topPanel.insets = new Insets(0, 0, 10, 5);
+        contentPanel.add(topPanel, gbc_topPanel);
+        
+        // This panel shows a skill table with categories, radio buttons for rating, and comment areas
+        JPanel tablePanel = new JPanel();
+        tablePanel.setLayout(new GridBagLayout());
+        tablePanel.setBackground(Color.LIGHT_GRAY);
+
         Border blackBorder = BorderFactory.createLineBorder(Color.BLACK);
         
         // GridBagLayout settings
@@ -219,7 +224,6 @@ public class SkillDevelopmentPanel extends JPanel {
         tablePanel.setLayout(gbl_panel);
         
         // ===== HEADER =====
-        
         JLabel lblCategory = new JLabel("Category", SwingConstants.CENTER);
         lblCategory.setFont(new Font("SansSerif", Font.BOLD, 16));
         lblCategory.setBorder(blackBorder);
@@ -231,6 +235,7 @@ public class SkillDevelopmentPanel extends JPanel {
         gbc_lblCategory.gridy = 0;
         tablePanel.add(lblCategory, gbc_lblCategory);
         
+        // Labels for skill categories (e.g. Passing, Tackling, Kicking)
         JLabel lblPassing = new JLabel("Passing", SwingConstants.CENTER);
         lblPassing.setFont(new Font("SansSerif", Font.BOLD, 14));
         lblPassing.setBorder(blackBorder);
@@ -288,7 +293,7 @@ public class SkillDevelopmentPanel extends JPanel {
         
         
         // <<<<<<<<<<<<<<< COMMENTS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
-        
+        // Text areas for coach comments about each skill
         JLabel lblComment = new JLabel("Comment", SwingConstants.CENTER);
         lblComment.setFont(new Font("SansSerif", Font.BOLD, 16));
         lblComment.setBorder(blackBorder);
@@ -531,12 +536,9 @@ public class SkillDevelopmentPanel extends JPanel {
 
         
         // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        
-
-        
+ 
         // SKILL LEVEL NUMBERS 
         // standard radio button grouping 
-        
         JLabel lblOne = new JLabel("1", SwingConstants.CENTER);
         lblOne.setFont(new Font("SansSerif", Font.BOLD, 16));
         lblOne.setBorder(blackBorder);
@@ -546,7 +548,6 @@ public class SkillDevelopmentPanel extends JPanel {
         gbc_lblOne.gridx = 3;
         gbc_lblOne.gridy = 1;
         tablePanel.add(lblOne, gbc_lblOne);
-        
         
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         
@@ -694,7 +695,7 @@ public class SkillDevelopmentPanel extends JPanel {
         standardGroup.add(rbtStandard_4);
         standardGroup.add(rbtStandard_5);
         
-        // radiobuttons for spin
+        // radio buttons for spin
         spinGroup = new ButtonGroup();
 
         // loop to create 5 radio buttons for Spin
@@ -756,7 +757,7 @@ public class SkillDevelopmentPanel extends JPanel {
             tablePanel.add(rbtPop, gbc_rbtPop);
         }
         
-     // radiobuttons for spin
+        // radiobuttons for spin
         frontGroup = new ButtonGroup();
 
         // loop to create 5 radio buttons for Spin
@@ -906,7 +907,7 @@ public class SkillDevelopmentPanel extends JPanel {
                tablePanel.add(rbtDrop, gbc_rbtDrop);
            }
            
-        // radio buttons for drop >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+           // radio buttons for drop >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
            puntGroup = new ButtonGroup();
 
            // loop to create 5 radio buttons for Spin
@@ -936,7 +937,7 @@ public class SkillDevelopmentPanel extends JPanel {
                tablePanel.add(rbtPunt, gbc_rbtPunt);
            }
            
-        // radio buttons for drop >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+           // radio buttons for drop >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
            grubberGroup = new ButtonGroup();
 
            // loop to create 5 radio buttons for Spin
@@ -966,7 +967,7 @@ public class SkillDevelopmentPanel extends JPanel {
                tablePanel.add(rbtGrubber, gbc_rbtGrubber);
            }
            
-        // radio buttons for drop >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+           // radio buttons for drop >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
            goalGroup = new ButtonGroup();
 
            // loop to create 5 radio buttons for Spin
@@ -995,11 +996,6 @@ public class SkillDevelopmentPanel extends JPanel {
 
                tablePanel.add(rbtGoal, gbc_rbtGoal);
            }
-        
-        
-           
-           
-
         
         // === SKILLS NAMES ===
         JLabel lblStandard = new JLabel("Standard", SwingConstants.CENTER);
@@ -1130,18 +1126,20 @@ public class SkillDevelopmentPanel extends JPanel {
         displayPanel.setLayout(new BorderLayout(10, 10));
         displayPanel.setBorder(new EmptyBorder(0, 0, 150, 50));
 
+        // Panel on the right to display summary of ratings and comments
         JLabel lblSummary = new JLabel("Summary", SwingConstants.CENTER);
         lblSummary.setFont(new Font("SansSerif", Font.BOLD, 16));
+     
+        displayPanel.add(lblSummary, BorderLayout.NORTH);
+        displayPanel.add(new JScrollPane(getTxtSummary()), BorderLayout.CENTER);
 
+        // Text area to show the summary content
         getTxtSummary().setLineWrap(true);
         getTxtSummary().setWrapStyleWord(true);
         getTxtSummary().setFont(new Font("SansSerif", Font.PLAIN, 14));
         getTxtSummary().setEditable(false);
         getTxtSummary().setBackground(new Color(240, 240, 240));
         getTxtSummary().setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-        displayPanel.add(lblSummary, BorderLayout.NORTH);
-        displayPanel.add(new JScrollPane(getTxtSummary()), BorderLayout.CENTER);
 
         GridBagConstraints gbc_displayPanel = new GridBagConstraints();
         gbc_displayPanel.gridx = 1; 
@@ -1151,40 +1149,83 @@ public class SkillDevelopmentPanel extends JPanel {
         gbc_displayPanel.insets = new Insets(0, 10, 0, 0); 
         contentPanel.add(displayPanel, gbc_displayPanel);
         
+        // Save button to trigger controller logic
         JButton btnSave = new JButton("Save");
         btnSave.setFont(new Font("SansSerif", Font.BOLD, 14));
-
    
         btnSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mySkillDevelopmentController.saveSkill();
-
-                clearForm(); 
-                JOptionPane.showMessageDialog(SkillDevelopmentPanel.this, "Data saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE); 
-                txtSummary.setText("");
+            }
+        });
+        
+        // Save button to trigger controller logic
+        JButton btnReset = new JButton("Reset Skill");
+        btnReset.setFont(new Font("SansSerif", Font.BOLD, 14)); 
+   
+        btnReset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mySkillDevelopmentController.reset();;
             }
         });
 
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setOpaque(false);
 
-        
-        displayPanel.add(btnSave, BorderLayout.SOUTH);
+        // Add vertically aligned buttons
+        JPanel verticalPanel = new JPanel();
+        verticalPanel.setLayout(new BoxLayout(verticalPanel, BoxLayout.Y_AXIS));
+        verticalPanel.setOpaque(false);
 
+        Dimension buttonSize = new Dimension(200, 40);
+        btnSave.setPreferredSize(buttonSize);
+        btnSave.setMaximumSize(buttonSize);
+        btnReset.setPreferredSize(buttonSize);
+        btnReset.setMaximumSize(buttonSize);
+
+        // Add buttons to vertical layout
+        verticalPanel.add(btnSave);
+        verticalPanel.add(Box.createVerticalStrut(10));
+        verticalPanel.add(btnReset);
+
+        // Add vertical panel to buttonPanel (which aligns it right)
+        buttonPanel.add(verticalPanel);
+
+        // Finally, add to displayPanel
+        displayPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         
     }
     
-    public void setSkillDevelopmentController(SkillDevelopmentController controller) {
-        this.mySkillDevelopmentController = controller;
+    /**
+     * Sets the controller that handles all the logic behind this panel.
+     * This lets the panel talk to the controller when saving data or updating the summary.
+     * 
+     * @param controller - responsible for handling skill development logic
+     * 
+     */
+    public void setSkillDevelopmentController(SkillDevelopmentController mySkillDevelopmentController) {
+        this.mySkillDevelopmentController = mySkillDevelopmentController;
     }
 
+//    // updates summary content
+//    public void updateSummary() {
+//		Player selectedPlayer = (Player) cmbPlayers.getSelectedItem();
+//	}
 
-    public void updateSummary() {
-		Player selectedPlayer = (Player) cmbPlayers.getSelectedItem();
-	}
 
-
-	// fill cmb
+    /**
+     * Generates player combo box with a list of players in the team.
+     *
+     * This method clears any existing entries from the combo box and then
+     * adds each {@link Player} object from the provided list. The full
+     * {@code Player} object is added to preserve access to its attributes
+     * when selected later.
+     *
+     * @param players the list of players to be added to the combo box
+     */
     public void populateCmb(List<Player> players) {
         cmbPlayers.removeAllItems();
 
@@ -1193,20 +1234,36 @@ public class SkillDevelopmentPanel extends JPanel {
         }
     }
     
+    
+    /**
+     * Retrieves the ID of the currently selected player from the player combo box.
+     *
+     * This method checks the JComboBox for the selected {@link Player} object.
+     * If a player is selected, it returns the player's member ID.
+     * If no player is selected, it returns -1.
+     *
+     * @return the member ID of the selected player, or -1 if no player is selected
+     */
     public int getSelectedPlayerId() {
         Player selectedPlayer = (Player) cmbPlayers.getSelectedItem();
 
         if (selectedPlayer != null) {
             int playerId = selectedPlayer.getMemberId();
-            System.out.println("Selected Player ID: " + playerId);
+            //System.out.println("Selected Player ID: " + playerId);
             return playerId;
         }
 
-        //System.out.println("No player selected.");
         return -1;
     }
 
-
+    /**
+     * Retrieves selected skill level for the "Standard" passing technique.
+     *
+     * This method checks which of the five radio buttons representing levels 1–5 is selected.
+     * If none are selected, it returns 0.
+     *
+     * @return the selected level for Standard passing (1–5), or 0 if none is selected
+     */
     public int getLevelForStandard() {
         if (rbtStandard_1.isSelected()) {
         	return 1;
@@ -1223,7 +1280,14 @@ public class SkillDevelopmentPanel extends JPanel {
         }
     }
     
-    
+    /**
+     * Each of methods below retrieves the selected skill level for the specific skills technique.
+     *
+     * Ii iterates through list of radio buttons corresponding to levels 1–5 for the specific skill,
+     * and returns the level of the selected button. If no button is selected, returns 0.
+     *
+     * @return the selected level for skill (1–5), or 0 if none is selected
+     */
     public int getLevelForSpin() {
         for (int i = 0; i < spinButtons.size(); i++) {
             if (spinButtons.get(i).isSelected()) {
@@ -1233,7 +1297,6 @@ public class SkillDevelopmentPanel extends JPanel {
         return 0;
     }
 
-    
     public int getLevelForPop() {
         for (int i = 0; i < popButtons.size(); i++) {
             if (popButtons.get(i).isSelected()) {
@@ -1325,12 +1388,17 @@ public class SkillDevelopmentPanel extends JPanel {
         return txtCommentPassing.getText();
     }
   
-
+    // Returns the full name of currently selected player from combo box.
     public String getSelectedPlayer() {
-        return (String) cmbPlayers.getSelectedItem();
+        Player selectedPlayer = (Player) cmbPlayers.getSelectedItem();
+
+        if (selectedPlayer != null) {
+            return selectedPlayer.getFullName();
+        } else {
+            // No player selected; return an empty string
+            return "";
+        }
     }
-
-
 
 	public JTextArea getTxtSummary() {
 		return txtSummary;
@@ -1340,9 +1408,15 @@ public class SkillDevelopmentPanel extends JPanel {
 	public void setTxtSummary(JTextArea txtSummary) {
 		this.txtSummary = txtSummary;
 	}
-
-
-
+	
+	/**
+	 * Each of methods below retrieves coach's comment for the skill name.
+	 *
+	 * This method returns text entered by the coach in the comment area
+	 * associated with the skill name. 
+	 *
+	 * @return the trimmed comment text for the skill name.
+	 */
 
 	// Standard
 	public String getTxtCommentStandard() {
@@ -1444,7 +1518,14 @@ public class SkillDevelopmentPanel extends JPanel {
 	}
 
 
-	
+	/**
+	 * Clears all inputs in skill development form.
+	 *
+	 * This method resets the player selection, clears all skill comment text areas,
+	 * resets the training date to today's date, and clears all selected radio buttons
+	 * for each skill rating group. It also clears the summary display area.
+	 *
+	 */
 	public void clearForm() {
 		
 		cmbPlayers.setSelectedIndex(-1);
@@ -1479,17 +1560,5 @@ public class SkillDevelopmentPanel extends JPanel {
 	    if (goalGroup != null) goalGroup.clearSelection();
 	    
 	    txtSummary.setText("");
-	    
-	    //mySkillDevelopmentController.clearSummaryData();
-
-
 	}
-
-
-
-	
-
 }
-
-
-

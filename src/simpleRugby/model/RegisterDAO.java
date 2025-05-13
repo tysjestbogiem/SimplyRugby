@@ -16,6 +16,11 @@ import java.sql.SQLException;
 
 import config.CommonConstraints;
 
+
+/**
+ * This class handles the database operations related to user registration.
+ * It connects to the database and inserts new member records.
+ */
 public class RegisterDAO {
 	
 	// tries to register a new user into database

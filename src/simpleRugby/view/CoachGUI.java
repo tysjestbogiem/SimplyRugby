@@ -4,10 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import simpleRugby.controler.CoachController;
 import simpleRugby.controler.ManagePlayersController;
 import simpleRugby.controler.PlayerPerformanceController;
 import simpleRugby.controler.SkillDevelopmentController;
-import simpleRugby.model.CoachController;
 import simpleRugby.model.PlayerPerformanceDAO;
 import simpleRugby.model.SkillDevelopmentDAO;
 import simpleRugby.view.*;
@@ -19,43 +19,38 @@ import simpleRugby.view.*;
  * (like managing players or recording training), and a main panel that uses 
  * CardLayout to switch between views.
  */
-
 public class CoachGUI extends JFrame {
 
     private static final long serialVersionUID = 1L;
+    
+    // Coach controller (handles logic behind the scenes)
     private CoachController myCoachController;
     private CardLayout cardLayout;
     private JPanel mainPanel;
     private JPanel logo;
-
-    public CoachGUI(CoachController controller) {
-        this.myCoachController = controller;
-       
     
+    // Panels for different features
+    private SkillDevelopmentPanel skillDevelopmentPanel;
+    private PlayerPerformancePanel playerPerformancePanel;
+    private ManagePlayersPanel managePlayersPanel;
+
+    // Constructor - builds the GUI
+    public CoachGUI() {
+        openGUI();
+    }
+    
+    /**
+     * Builds the GUI and sets everything up
+     */
+    private void openGUI() {
     	setTitle("Coach View");
-        
-        SkillDevelopmentPanel skillPanel = new SkillDevelopmentPanel();
-        SkillDevelopmentDAO skillModel = new SkillDevelopmentDAO();
-        SkillDevelopmentController skillController = new SkillDevelopmentController(skillModel, skillPanel);
-        skillPanel.setSkillDevelopmentController(skillController);
-
-        ManagePlayersPanel playersPanel = new ManagePlayersPanel();
-        ManagePlayersController playersController = new ManagePlayersController(playersPanel);
-        playersPanel.setController(playersController);
-        
-        PlayerPerformancePanel playerPerformancePanel = new PlayerPerformancePanel();
-        PlayerPerformanceController playerPerformanceController = new PlayerPerformanceController(playerPerformancePanel);
-        playerPerformancePanel.setMyPlayerPerformanceController(playerPerformanceController);
-        playerPerformanceController.displayPlayers();
-
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         getContentPane().setLayout(new BorderLayout());
 
         // side panel
         JPanel sidePanel = new JPanel();
-        sidePanel.setLayout(new GridLayout(10, 1)); // all buttons same height
+        sidePanel.setLayout(new GridLayout(10, 1)); // 10 buttons same height
         sidePanel.setPreferredSize(new Dimension(200, 0)); // consistent width
 
         // logo panel
@@ -136,9 +131,23 @@ public class CoachGUI extends JFrame {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
         mainPanel.setPreferredSize(new Dimension(800, 800));
+        
+        // Create and inject dependencies
+        managePlayersPanel = new ManagePlayersPanel();
+        ManagePlayersController playersController = new ManagePlayersController(managePlayersPanel);
+        managePlayersPanel.setController(playersController);
 
-        mainPanel.add(playersPanel, "Manage Players");
-        mainPanel.add(skillPanel, "Skill Development");
+        skillDevelopmentPanel = new SkillDevelopmentPanel();
+        SkillDevelopmentController skillController = new SkillDevelopmentController(new SkillDevelopmentDAO(), skillDevelopmentPanel);
+        skillDevelopmentPanel.setSkillDevelopmentController(skillController);
+
+        playerPerformancePanel = new PlayerPerformancePanel();
+        PlayerPerformanceController performanceController = new PlayerPerformanceController(playerPerformancePanel);
+        playerPerformancePanel.setMyPlayerPerformanceController(performanceController);
+        performanceController.displayPlayers();
+
+        mainPanel.add(managePlayersPanel, "Manage Players");
+        mainPanel.add(skillDevelopmentPanel, "Skill Development");
         mainPanel.add(playerPerformancePanel, "Player Performance");
         mainPanel.add(new TrainingRecordPanel(), "Training Record");
         mainPanel.add(new MatchPerformancePanel(), "Match Performance");
@@ -146,6 +155,7 @@ public class CoachGUI extends JFrame {
         mainPanel.add(new ReassignmentPanel(), "Reassignment");
 
         // action listeners
+        // show the right panel when button is clicked
         btnManagePlayers.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(mainPanel, "Manage Players");
@@ -155,15 +165,14 @@ public class CoachGUI extends JFrame {
         btnSkillDevelopment.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(mainPanel, "Skill Development");
-                skillController.reset();
+                skillController.reset(); // reset the form each time it's opened
             }
         });
         
         btnPlayerPerformance.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	playerPerformancePanel.reset(); 
-                cardLayout.show(mainPanel, "Player Performance");
-                
+            	cardLayout.show(mainPanel, "Player Performance");
+            	playerPerformancePanel.reset(); // reset the form each time it's opened
             }
         });
         
@@ -191,6 +200,7 @@ public class CoachGUI extends JFrame {
             }
         });
 
+        // Log out button closes the window
         btnLogOut.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
@@ -201,6 +211,13 @@ public class CoachGUI extends JFrame {
         getContentPane().add(sidePanel, BorderLayout.WEST);
         getContentPane().add(mainPanel, BorderLayout.CENTER);
         setVisible(true);
+    }
+    
+    /**
+     * Lets another class set this controller (used for logic)
+     */
+    public void setController(CoachController controller) {
+        this.myCoachController = controller;
     }
 }
 

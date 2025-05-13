@@ -16,6 +16,10 @@ import simpleRugby.model.RegisterDAO;
 import simpleRugby.view.MemberSecretaryGUI;
 import simpleRugby.view.RegisterPanel;
 
+/**
+ * Handles the registration logic for new members.
+ * Interacts with the view (e.g., RegisterGUI) and the DAO layer to store new user details.
+ */
 public class RegisterController {
     
     private RegisterPanel registerPanel; // the UI for registering users
@@ -34,7 +38,7 @@ public class RegisterController {
         MemberSecretaryGUI memberSecretaryGUI = new MemberSecretaryGUI(myMemberSecretaryController, this);
         memberSecretaryGUI.setVisible(true);
     }
-
+    
     // register a new user with the generated username
     public String createNewUser() {
         // make sure a username has been generated first

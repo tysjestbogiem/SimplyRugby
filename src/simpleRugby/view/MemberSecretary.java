@@ -101,17 +101,17 @@ public class MemberSecretary extends JFrame {
         mainPanel = new JPanel(cardLayout);
 
         // instances of the panel classes to the main panel
-        mainPanel.add(new MembersPanel(), "Members"); 
+        //mainPanel.add(new MembersPanel(), "Members"); 
         
         // create a controller for registration and give it to AddUserPanel
         RegisterController myRegisterController = new RegisterController(); 
-        mainPanel.add(new AddUserPanel(myRegisterController), "Add User"); 
+        // mainPanel.add(new AddUserPanel(myRegisterController), "Add User"); 
         
-        mainPanel.add(new EditUserPanel(), "Edit User"); 
+        //mainPanel.add(new EditUserPanel(), "Edit User"); 
         
-        mainPanel.add(new AddSquadPanel(), "Add Squad");
+        //mainPanel.add(new AddSquadPanel(), "Add Squad");
         
-        mainPanel.add(new ReportsPanel(), "Reports");
+        //mainPanel.add(new ReportsPanel(), "Reports");
 
         // action listeners for buttons to switch panels
         btnMembers.addActionListener(new ActionListener() {

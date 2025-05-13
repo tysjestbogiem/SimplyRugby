@@ -16,10 +16,19 @@ import java.sql.SQLException;
 
 import config.CommonConstraints;
 
+/**
+ * LoginDAO handles the login logic and database access for user authentication.
+ * 
+ * It connects to the database to check if a username/password exists,
+ * and fetches the user's role if login is successful.
+ */
 public class LoginDAO {
 
 	
-	// checks username and password against user_info table in the database
+	/**
+     * Checks the username and password against the database.
+     * If valid, it sets the session and returns true.
+     */
 	public static boolean validateLogin(String username, String password) throws SQLException {
 		
 		// this will be returned at the end – set to false by default
@@ -33,7 +42,7 @@ public class LoginDAO {
 				CommonConstraints.DB_PASSWORD
 			);
 			
-			// prepare a SQL query that checks if the username and password match a row
+			// prepare a SQL query that checks if the username and password match a row			
 			PreparedStatement validateUser = connection.prepareStatement(
 				"SELECT * FROM staff WHERE username = ? AND password = ?"
 			);
@@ -65,17 +74,21 @@ public class LoginDAO {
 		return retVal;
 	}
 	
-	
+	/**
+     * Gets the user's role based on the username.
+     */
 	public static String getRoleByUsername(String username) {
 	    String role = null;
 	    
 	    try {
+	    	// Connect to the database
 	        Connection connection = DriverManager.getConnection(
 	            CommonConstraints.DB_URL,
 	            CommonConstraints.DB_USER,
 	            CommonConstraints.DB_PASSWORD
 	        );
 	        
+	        // Prepare SQL to get role for the given username
 	        PreparedStatement getRole = connection.prepareStatement(
 	            "SELECT staff_role FROM staff WHERE username = ?"
 	        );
@@ -83,6 +96,7 @@ public class LoginDAO {
 	        getRole.setString(1, username);
 	        ResultSet resultSet = getRole.executeQuery();
 	        
+	        // If a result is found, return the role
 	        if (resultSet.next()) {
 	            role = resultSet.getString("staff_role");
 	        }

@@ -14,11 +14,15 @@ import java.util.Map;
 
 import config.CommonConstraints;
 
+/**
+ * This class is responsible for retrieving skill performance data from the database.
+ * It's used for creating line graphs showing how a player's skills change over time.
+ */
 public class SkillPerformanceGraphDAO {
-	
-	private Map<String, Integer> skillData = new LinkedHashMap<>();
 
-	// to view graph with all skills on it
+	/**
+	 * Gets a list of all skill performance levels (all skills) for a player.
+	 */
 	public static List<Skill> getLineStatistics(int playerId) {
 		List<Skill> skills = new ArrayList<>();
 
@@ -27,18 +31,19 @@ public class SkillPerformanceGraphDAO {
 	            CommonConstraints.DB_USER,
 	            CommonConstraints.DB_PASSWORD)) {
 
+	    	// Select skill name, level, and date for a specific player
 	    	PreparedStatement statement = connection.prepareStatement(
 	    		    "SELECT training_date, skill_level, skill_name FROM skill WHERE skill_level IS NOT NULL AND player_id = ? " +
 	    		    "ORDER BY training_date ASC"
 	    		);
 
-	        statement.setInt(1, playerId);
+	        statement.setInt(1, playerId); // Set player ID for query
 
 	        ResultSet resultSet = statement.executeQuery();
 	        
 	        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy"); // formatter date
 
-
+	        // Loop through results and store them in Skill objects
 	        while (resultSet.next()) {
 	            Skill skill = new Skill();
 
@@ -58,11 +63,14 @@ public class SkillPerformanceGraphDAO {
 	        e.printStackTrace();
 	    }
 
-	    return skills;
+	    return skills; // Return the list
 	}
 	
 	
-	// view line graph for specific skill chosen from drop down
+	/**
+	 * Gets skill performance data for a specific skill name (e.g., "Spin").
+	 * This is used when user selects a skill from the drop-down to see its graph.
+	 */
 	public static List<Skill> getLineStatisticsForSkill(int playerId, String skillName) {
 		List<Skill> skills = new ArrayList<>();
 
@@ -71,6 +79,7 @@ public class SkillPerformanceGraphDAO {
 	            CommonConstraints.DB_USER,
 	            CommonConstraints.DB_PASSWORD)) {
 
+	    	// Fetch records only for selected skill
 	    	PreparedStatement statement = connection.prepareStatement(
 	                "SELECT * FROM skill WHERE player_id = ? AND skill_name = ? "
 	                + "ORDER BY training_date"
@@ -104,7 +113,7 @@ public class SkillPerformanceGraphDAO {
 	        e.printStackTrace();
 	    }
 
-	    return skills;
+	    return skills; // Return the list
 	}
 
 }

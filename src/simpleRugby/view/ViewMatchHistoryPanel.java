@@ -6,6 +6,10 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * Panel to view match history details.
+ * Currently just displays a placeholder message.
+ */
 public class ViewMatchHistoryPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -16,7 +20,6 @@ public class ViewMatchHistoryPanel extends JPanel {
 		setLayout(new BorderLayout()); 
         add(new JLabel("Panel under construction - View Match History Panel", JLabel.CENTER), BorderLayout.CENTER); 
         setBackground(Color.LIGHT_GRAY); 
-
 	}
 
 }

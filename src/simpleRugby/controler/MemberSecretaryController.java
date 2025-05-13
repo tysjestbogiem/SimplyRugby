@@ -17,8 +17,6 @@ public class MemberSecretaryController {
 
     private MemberSecretaryGUI memberSecretaryGUI; // main view for Member Secretary
 
-
-
     public MemberSecretaryController(MemberSecretaryGUI memberSecretaryGUI) {
 
     	// new RegisterController so the secretary can use registration features

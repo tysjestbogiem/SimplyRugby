@@ -13,7 +13,10 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-
+/**
+ * This class builds and returns line chart panel showing Player skill level progression over time.
+ * It's used to visually track how a player's skills have changed across different training dates.
+ */
 public class SkillPerformanceGraph extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -21,13 +24,16 @@ public class SkillPerformanceGraph extends JPanel {
     private DefaultCategoryDataset dataset;
     private ChartPanel chartPanel;
     
-    
+    /**
+	 * Creates and returns a chart panel with a line graph based on the skill dataset provided.
+	 */
     public JPanel createChartPanel(CategoryDataset dataset) {
+    	
         String chartTitle = "Skill Progress Over Time";
         String categoryAxisLabel = "Training Date";
         String valueAxisLabel = "Skill Level";
  
-
+        // Create the line chart
         JFreeChart chart = ChartFactory.createLineChart(
             chartTitle,
             categoryAxisLabel,
@@ -35,24 +41,22 @@ public class SkillPerformanceGraph extends JPanel {
             dataset
         );
         
-        // background colour
+        // Set how chart looks
         chart.setBackgroundPaint(Color.WHITE);
         chart.getTitle().setFont(new Font("SansSerif", Font.BOLD, 18));
         chart.getCategoryPlot().getDomainAxis().setLabelFont(new Font("SansSerif", Font.BOLD, 14));
         chart.getCategoryPlot().getRangeAxis().setLabelFont(new Font("SansSerif", Font.BOLD, 14));
-
         chart.getCategoryPlot().getDomainAxis().setTickLabelFont(new Font("SansSerif", Font.PLAIN, 12));
         chart.getCategoryPlot().getRangeAxis().setTickLabelFont(new Font("SansSerif", Font.PLAIN, 12));
-
         chart.setAntiAlias(true);
-
-
         
+        // Sets plot area (where lines are drawn)
         org.jfree.chart.plot.CategoryPlot plot = chart.getCategoryPlot();
         plot.setBackgroundPaint(Color.WHITE); // background
         plot.setRangeGridlinePaint(Color.LIGHT_GRAY); 
         plot.setDomainGridlinePaint(Color.LIGHT_GRAY); 
         
+        // Set axis fonts
         plot.getDomainAxis().setLabelFont(new Font("SansSerif", Font.BOLD, 14));
         plot.getRangeAxis().setLabelFont(new Font("SansSerif", Font.BOLD, 14));
         plot.getDomainAxis().setTickLabelFont(new Font("SansSerif", Font.PLAIN, 12));
@@ -60,46 +64,21 @@ public class SkillPerformanceGraph extends JPanel {
 
         chart.getLegend().setItemFont(new Font("SansSerif", Font.PLAIN, 12));
 
+        // Sets line renderer (controls how lines and points are drawn)
         org.jfree.chart.renderer.category.LineAndShapeRenderer renderer = new org.jfree.chart.renderer.category.LineAndShapeRenderer();
-         
         renderer.setBaseShapesVisible(true);
         renderer.setDrawOutlines(true);
         renderer.setUseFillPaint(true);
         
-        // colours for each skill 
-        renderer.setSeriesPaint(0, java.awt.Color.RED); // standard
-        renderer.setSeriesStroke(0, new BasicStroke(2.0f)); 
-        renderer.setSeriesPaint(1, java.awt.Color.BLUE); // spin
-        renderer.setSeriesStroke(1, new BasicStroke(2.0f)); 
-        renderer.setSeriesPaint(2, java.awt.Color.GREEN); // pop
-        renderer.setSeriesStroke(2, new BasicStroke(2.0f)); 
-        renderer.setSeriesPaint(3, java.awt.Color.ORANGE); //front
-        renderer.setSeriesStroke(3, new BasicStroke(2.0f)); 
-        renderer.setSeriesPaint(4, java.awt.Color.MAGENTA); //rear
-        renderer.setSeriesStroke(4, new BasicStroke(2.0f)); 
-        renderer.setSeriesPaint(5, java.awt.Color.CYAN); // side
-        renderer.setSeriesStroke(5, new BasicStroke(2.0f)); 
-        renderer.setSeriesPaint(6, java.awt.Color.YELLOW); // scrabble
-        renderer.setSeriesStroke(6, new BasicStroke(2.0f)); 
-        renderer.setSeriesPaint(7, java.awt.Color.DARK_GRAY); //drop
-        renderer.setSeriesStroke(7, new BasicStroke(2.0f)); 
-        renderer.setSeriesPaint(8, java.awt.Color.BLACK); // punt
-        renderer.setSeriesStroke(8, new BasicStroke(2.0f)); 
-        renderer.setSeriesPaint(9, java.awt.Color.RED); //grubber
-        renderer.setSeriesStroke(9, new BasicStroke(2.0f)); 
-        renderer.setSeriesPaint(10, java.awt.Color.PINK); //goal
-        renderer.setSeriesStroke(10, new BasicStroke(2.0f)); 
-        plot.setRenderer(renderer);
-        
+        // Force Y-axis to show whole numbers from 0 to 6
         org.jfree.chart.axis.NumberAxis yAxis = (org.jfree.chart.axis.NumberAxis) plot.getRangeAxis();
         yAxis.setStandardTickUnits(org.jfree.chart.axis.NumberAxis.createIntegerTickUnits());
 
-       yAxis.setRange(1, 5); 
+        yAxis.setRange(0, 6); 
 
+        // Return the panel containing the chart
         return new ChartPanel(chart);
     }
-
-
-	}
+}
 
 

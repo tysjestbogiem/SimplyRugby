@@ -8,8 +8,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import simpleRugby.controler.CoachController;
 import simpleRugby.controler.LoginController;
-import simpleRugby.model.CoachController;
 
 import java.awt.SystemColor;
 import javax.swing.JLabel;
@@ -45,31 +45,29 @@ import javax.swing.GroupLayout.Alignment;
  * If login is successful, this screen closes and next GUI loads.
  * If login fails, a message appears and fields are cleared.
  */
-
 public class LoginGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	
 	private LoginController myLoginController;
 	private CoachController myCoachController;
 	private JTextField txtUsername;
 	private JPasswordField txtPassword;
+	private JButton btnLogin;
 
 	
-	// constructor – sets up the login screen and handles button actions
-    public LoginGUI (LoginController loginController) {
+	// Constructor – sets up the login screen and handles button actions
+    public LoginGUI () {
     	super("Login"); // page title
     	
-    	// save reference to the controller so we can call login logic
-    	this.myLoginController = loginController;
-    	
+    	// Save reference to the controller so we can call login logic
+    	this.myLoginController = new LoginController(this);
     	
         setAutoRequestFocus(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH); // full-screen mode
         getContentPane().setLayout(new BorderLayout());
-        
+                // Create the outer container
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -92,8 +90,7 @@ public class LoginGUI extends JFrame {
         //centerWrapper.add(loginPanel);
         contentPane.add(centerWrapper, BorderLayout.CENTER);
 
-
-        
+        // Username input
         txtUsername = new JTextField();
         txtUsername.setFont(new Font("Tahoma", Font.PLAIN, 14));
         txtUsername.setColumns(1);
@@ -104,6 +101,7 @@ public class LoginGUI extends JFrame {
         JLabel lblPassword = new JLabel("Password:");
         lblPassword.setFont(new Font("SansSerif", Font.PLAIN, 14));
         
+        // Password input
         txtPassword = new JPasswordField();
         txtPassword.setFont(new Font("Tahoma", Font.PLAIN, 14));
         
@@ -112,9 +110,11 @@ public class LoginGUI extends JFrame {
         lblForgotPass.setForeground(new Color(255, 99, 71));
         lblForgotPass.setFont(new Font("SansSerif", Font.PLAIN, 12));
         
-        JButton btnLogin = new JButton("Login");
+        // Login button
+        btnLogin = new JButton("Login");
         btnLogin.setFont(new Font("SansSerif", Font.BOLD, 16));
         
+        // Trigger login when button is clicked
         btnLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnLogin.setBackground(SystemColor.activeCaption);
         btnLogin.addActionListener(new ActionListener() {
@@ -138,7 +138,7 @@ public class LoginGUI extends JFrame {
         lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
         lblWelcome.setFont(new Font("SansSerif", Font.BOLD, 18));
         
-        // layout manager for login panel
+        // Layout manager for login panel
         GroupLayout gl_loginPanel = new GroupLayout(loginPanel);
         gl_loginPanel.setHorizontalGroup(
         	gl_loginPanel.createParallelGroup(Alignment.LEADING)
@@ -182,13 +182,10 @@ public class LoginGUI extends JFrame {
         );
         loginPanel.setLayout(gl_loginPanel);
 
-        
-
-        setVisible(true); // // show the login window
+        setVisible(true); // show the login window
     }
     
-    
-    // checks that the username field isn't empty
+    // Checks that the username field isn't empty
  	private boolean validateInput() {
  		Boolean retval = true;
  		
@@ -199,19 +196,23 @@ public class LoginGUI extends JFrame {
  		return retval;
  	}
  	
- 	
-
- 	// show a simple popup message to user
+ 	// Show a popup message to user
 	public void displayMessage(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
 	
-	// crear txt boxes once invalid input
+	// Clears txt boxes once invalid input
 	public void clearFields() {
 	    txtUsername.setText("");
 	    txtPassword.setText("");
 	}
-
+	
+	// prevent user attempt to login, when 3 incorrect attempts made
+	public void disableLogin() {
+	    btnLogin.setEnabled(false); // disable the login button
+	    txtUsername.setEnabled(false);
+	    txtPassword.setEnabled(false);
+	}
 
 }
 

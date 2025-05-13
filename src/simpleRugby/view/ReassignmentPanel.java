@@ -6,6 +6,10 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * Panel to show match reassignment details.
+ * Currently just displays a placeholder message.
+ */
 public class ReassignmentPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -20,3 +24,4 @@ public class ReassignmentPanel extends JPanel {
 	}
 
 }
+

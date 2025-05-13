@@ -2,10 +2,8 @@ package simpleRugby.controler;
 
 import java.sql.SQLException;
 
-import simpleRugby.model.CoachController;
 
 import simpleRugby.model.LoginDAO;
-import simpleRugby.model.Model;
 import simpleRugby.model.Staff;
 import simpleRugby.view.CoachGUI;
 import simpleRugby.view.LoginGUI;
@@ -21,17 +19,24 @@ import simpleRugby.view.MemberSecretaryGUI;
 
 public class LoginController {
 	
+	private LoginGUI myLoginGUI;
+	private int failedAttempts = 0;
+	private int MAX_ATTEMPTS = 3;
+		
+	/**
+     * Constructor that connects this controller with the login screen.
+     *      * @param loginGUI window user interacts with
+     */
+	public LoginController(LoginGUI myLoginGUI) {
+        this.myLoginGUI = myLoginGUI;
+    }
 	
-	private LoginGUI loginGUI;
 	
-	
-	// constructor
-	public LoginController() {
-		loginGUI = new LoginGUI(this);
-		loginGUI.setVisible(true);
-	}
-	
-	// checks login credentials, if valid, opens correct view.
+	/**
+     * Checks the username and password entered by the user.
+     * If correct, opens the correct interface (Coach or Membership Secretary).
+     *
+     */
 	public boolean handleLoginRequest(String username, String password) throws SQLException {
 		
 		 boolean loginSuccess = LoginDAO.validateLogin(username, password);
@@ -45,25 +50,28 @@ public class LoginController {
 	        String role = LoginDAO.getRoleByUsername(username);
 
 	        if (role == null) {
-	            loginGUI.displayMessage("Login failed: no role found");
+	        	myLoginGUI.displayMessage("Login failed: no role found");
 	            return false;
 	        }
 
-	        loginGUI.displayMessage("Login accepted");
-	        loginGUI.setVisible(false); // hide login screen
+	        myLoginGUI.displayMessage("Login accepted");
+	        myLoginGUI.setVisible(false); // hide login screen
 
 	        if (role.equalsIgnoreCase("Coach")) {
-	        	CoachController coachController = new CoachController(); 
-	        	CoachGUI coachGUI = new CoachGUI(coachController);      
-	            coachGUI.setVisible(true);
+	        	// show coach interface
+	        	CoachGUI coachGUI = new CoachGUI();
+	        	CoachController coachController = new CoachController(coachGUI);
+	        	coachGUI.setController(coachController);
+	        	coachGUI.setVisible(true);
 
 	        } else if (role.equalsIgnoreCase("Membership Secretary")) {
+	        	// show member secretary interface
 	            MemberSecretaryGUI memberSecretaryGUI = new MemberSecretaryGUI();
 	            new MemberSecretaryController(memberSecretaryGUI);
 	            memberSecretaryGUI.setVisible(true);
 
 	        } else {
-	            loginGUI.displayMessage("Unknown role: " + role);
+	        	myLoginGUI.displayMessage("Unknown role: " + role);
 	            return false;
 	        }
 
@@ -71,24 +79,35 @@ public class LoginController {
 	    }
 	
 	
-	// function to let user know what happens if login/ server issues
+	/**
+     * Manages full login attempt: checks credentials and handles errors.
+     * Displays messages to the user in case something goes wrong.
+     */
 	public void loginAttempt(String username, String password) {
 	    try {
 	        boolean result = handleLoginRequest(username, password);
 
 	        if (result) {
-	            loginGUI.dispose(); 
+	            myLoginGUI.dispose(); // successful login
+	            failedAttempts = 0;   // reset attempts
 	        } else {
-	            loginGUI.displayMessage("Invalid login credentials!");
-	            loginGUI.clearFields();
+	            failedAttempts++;
+	            
+	            if (failedAttempts >= MAX_ATTEMPTS) {
+	                myLoginGUI.displayMessage("Too many failed attempts.\nPlease contact the Member Secretary to reset your password.");
+	                myLoginGUI.disableLogin(); // method to disable login button or input fields
+	            } else {
+	                myLoginGUI.displayMessage("Invalid login credentials! (" + failedAttempts + "/" + MAX_ATTEMPTS + ")");
+	                myLoginGUI.clearFields();
+	            }
 	        }
 
 	    } catch (SQLException e) {
 	        if (e.getMessage().contains("Communications link failure") || 
 	            e.getMessage().toLowerCase().contains("connect")) {
-	            loginGUI.displayMessage("Cannot connect to the server. Try again later.");
+	            myLoginGUI.displayMessage("Cannot connect to the server. Try again later.");
 	        } else {
-	            loginGUI.displayMessage("A database error occurred: " + e.getMessage());
+	            myLoginGUI.displayMessage("A database error occurred: " + e.getMessage());
 	        }
 	        e.printStackTrace();
 	    }

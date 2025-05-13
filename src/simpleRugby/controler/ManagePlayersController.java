@@ -9,7 +9,7 @@ import simpleRugby.view.ManagePlayersPanel;
 
 /**
  * The ManagePlayersPanelController handles communication between 
- * ManagePlayersPanel (view) and ManagePlayersPanelDAO (model layer).
+ * ManagePlayersPanel (view - GUI) and ManagePlayersPanelDAO (model layer - DAO).
  * 
  * Its main job is to load the list of players from the database and pass that data 
  * to the view so it can be shown in a table (JTable).
@@ -17,16 +17,23 @@ import simpleRugby.view.ManagePlayersPanel;
 
 public class ManagePlayersController {
 
-    private ManagePlayersPanel myManagePlayersPanel; // the panel that shows the list of players
+	// Reference to the GUI panel that displays the list of players
+    private ManagePlayersPanel myManagePlayersPanel; 
 
-    // constructor takes view and loads players into it
+    /**
+     * Constructor: sets up the connection between controller and view.
+     * As soon as the controller is created, it loads players into the table.
+     */
     public ManagePlayersController(ManagePlayersPanel myManagePlayersPanel) {
     	
         this.myManagePlayersPanel = myManagePlayersPanel;
         loadPlayers(); // call this straight away so the table is filled
     }
-
-    // Loads all players from database and updates table in the view
+    
+    /**
+     * Loads players from the database and displays them in the table.
+     * It fetches only the players linked to the currently logged-in coach.
+     */
     public void loadPlayers() {
         // get list of players from ManagePlayersPanelDAO
     	int loggedUserId = SessionManager.getUserId();
@@ -39,6 +46,9 @@ public class ManagePlayersController {
         // System.out.println("Loaded players: " + players.size());
     }
     
+    /**
+     * Updates a player's position in the database.
+     */
     public boolean positionChange(int playerId, String newPosition) {
         return ManagePlayersDAO.updatePlayerPosition(playerId, newPosition);
     }

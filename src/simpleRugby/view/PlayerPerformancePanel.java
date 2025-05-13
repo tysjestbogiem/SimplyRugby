@@ -1,6 +1,7 @@
 package simpleRugby.view;
 
 import java.awt.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.List;
@@ -14,6 +15,16 @@ import org.jfree.data.category.CategoryDataset;
 import simpleRugby.controler.PlayerPerformanceController;
 import simpleRugby.controler.SkillPerformanceGraphController;
 import simpleRugby.model.*;
+
+
+/**
+ * This panel lets coaches view how a player has performed in training.
+ * 
+ * Coaches can:
+ * - Pick a player to view their skill ratings over time
+ * - Read comments left during training
+ * - Choose a skill and see a graph showing performance changes
+ */
 
 public class PlayerPerformancePanel extends JPanel {
 
@@ -35,28 +46,27 @@ public class PlayerPerformancePanel extends JPanel {
 
 	public PlayerPerformancePanel() {
 
-		
+		// Set up panel layout and background
 		setLayout(new BorderLayout());
 		setBackground(Color.LIGHT_GRAY);
 
-		
 		JPanel contentPanel = new JPanel(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(50, 50, 50, 50));
 		contentPanel.setBackground(Color.LIGHT_GRAY);
 		contentPanel.setPreferredSize(new Dimension(1200, 800));
 
-		// top panel
-		// team name and player selection combo box
+		// Top panel
+		// Shows team name and let the coach choose a player from the dropdown
 		JPanel topPanel = new JPanel(new GridLayout(3, 1, 0, 10));
 		topPanel.setBackground(Color.LIGHT_GRAY);
 		topPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 
-		// team name label
+		// Team name label
 		JLabel lblTeam = new JLabel("Team: " + SquadDAO.getSquadNameByCoach(SessionManager.getUserId()));
 		lblTeam.setFont(new Font("SansSerif", Font.BOLD, 16));
 		topPanel.add(lblTeam);
 
-		// player selection label and combo box
+		// Player selection label and combo box
 		JLabel lblPlayers = new JLabel("Select Player:");
 		lblPlayers.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		topPanel.add(lblPlayers);
@@ -64,6 +74,7 @@ public class PlayerPerformancePanel extends JPanel {
 		cmbPlayers = new JComboBox<>();
 		cmbPlayers.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		cmbPlayers.setPreferredSize(new Dimension(200, 30));
+		// When a player is selected, updates table and comment section
 		cmbPlayers.addActionListener(e -> {
 		    if (!uploadPlayers) {
 		    	return; // empty table when default (empty) player
@@ -79,7 +90,8 @@ public class PlayerPerformancePanel extends JPanel {
 
 		contentPanel.add(topPanel, BorderLayout.NORTH);
 
-		// middles - skill table
+		// Middle - Skill table
+		// Create a table to display the player's past skill ratings
 		model = new DefaultTableModel();
 		model.addColumn("Date");
 		table = new JTable(model);
@@ -90,13 +102,13 @@ public class PlayerPerformancePanel extends JPanel {
 		scrollPane.setPreferredSize(new Dimension(1000, 500));
 		contentPanel.add(scrollPane, BorderLayout.CENTER);
 
-		
+		// This section has comment box and a panel to show skill performance charts
 		bottomPanel = new JPanel(new BorderLayout());
 		bottomPanel.setPreferredSize(new Dimension(1000, 300));
 		bottomPanel.setBackground(Color.LIGHT_GRAY);
 		bottomPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
 
-		// comment box
+		// Comment box
 		txtComments = new JTextArea(10, 200);
 		txtComments.setLineWrap(true);
 		txtComments.setWrapStyleWord(true);
@@ -109,37 +121,22 @@ public class PlayerPerformancePanel extends JPanel {
 		buttonPanel.setBackground(Color.LIGHT_GRAY);
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
 
-		// Combo box for selecting skill
+		// Lets the coach choose which skill to show on the graph
 		cmbSkills = new JComboBox<>();
 		cmbSkills.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		cmbSkills.setMaximumSize(new Dimension(200, 30)); 
 		cmbSkills.setAlignmentX(Component.CENTER_ALIGNMENT); 
+		cmbSkills.setToolTipText("Select a skill to view performance graph");
 
-		// Button below it
+		// When clicked, it shows a graph of how the player has performed in the selected skill
 		btnDisplayStatistics = new JButton("Display Statistics");
 		btnDisplayStatistics.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		btnDisplayStatistics.setMaximumSize(new Dimension(200, 30));
 		btnDisplayStatistics.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnDisplayStatistics.setMnemonic(KeyEvent.VK_D);
+		btnDisplayStatistics.setToolTipText("Generate chart for selected skill");
 		
-		// option one, display all skills < pure chaos
-//		btnDisplayStatistics.addActionListener((ActionEvent e) -> {
-//			int playerId = getSelectedPlayerId();
-//			if (playerId != -1) {
-//				List<Skill> skills = SkillPerformanceGraphDAO.getLineStatistics(playerId);
-//				CategoryDataset dataset = mySkillPerformanceGraphController.createDataset(skills);
-//				JPanel chartPanel = mySkillPerformanceGraph.createChartPanel(dataset);
-//				JFrame frame = new JFrame("Skill Performance Graph");
-//				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//				frame.setSize(800, 600);
-//				frame.getContentPane().add(chartPanel);
-//				frame.setVisible(true);
-//			} else {
-//				JOptionPane.showMessageDialog(null, "Please select a player first.", "Warning", JOptionPane.WARNING_MESSAGE);
-//			}
-//		});
-		
-		// display specific skills <-- looks better, 
+		// Display specific skills <-- looks better, 
 		btnDisplayStatistics.addActionListener((ActionEvent e) -> {
 		    int playerId = getSelectedPlayerId();
 		    Skill selectedSkill = (Skill) cmbSkills.getSelectedItem();
@@ -169,7 +166,7 @@ public class PlayerPerformancePanel extends JPanel {
 		});
 
 
-		// add skill combo and button to panel
+		// ad skill combo and button to panel
 		buttonPanel.add(cmbSkills);
 		buttonPanel.add(Box.createRigidArea(new Dimension(0, 10))); // spacing
 		buttonPanel.add(btnDisplayStatistics);
@@ -182,7 +179,10 @@ public class PlayerPerformancePanel extends JPanel {
 		add(contentPanel, BorderLayout.CENTER);
 	}
 
-	// setter called after controller is created to set up listeners and data
+	/**
+	 * Setter called after the controller is created.
+	 * Connects the controller to the view and fills in player/skill data.
+	 */
 	public void setMyPlayerPerformanceController(PlayerPerformanceController myPlayerPerformanceController) {
 		this.myPlayerPerformanceController = myPlayerPerformanceController;
 
@@ -196,12 +196,12 @@ public class PlayerPerformancePanel extends JPanel {
 		myPlayerPerformanceController.displaySkills();
 	}
 
-	// allows controller to update the table
+	// Allows controller to update the table
 	public void updateTableModel(DefaultTableModel model) {
 		table.setModel(model);
 	}
 
-	// fill player combo box with player list
+	// Fill the player dropdown with the list of players
 	public void populateCmb(List<Player> players) {
 		cmbPlayers.removeAllItems();
 		for (Player player : players) {
@@ -210,7 +210,7 @@ public class PlayerPerformancePanel extends JPanel {
 		cmbPlayers.setSelectedIndex(-1);
 	}
 
-	// fill skill combo box with skill list
+	// Fill the skill dropdown with the list of available skills
 	public void populateSkillCmb(List<Skill> skills) {
 		cmbSkills.removeAllItems();
 		for (Skill skill : skills) {
@@ -219,7 +219,7 @@ public class PlayerPerformancePanel extends JPanel {
 		 
 	}
 
-	// return selected player ID or -1 if none selected
+	// Get the ID of the selected player, or -1 if none is picked
 	public int getSelectedPlayerId() {
 		Player selectedPlayer = (Player) cmbPlayers.getSelectedItem();
 		if (selectedPlayer != null) {
@@ -229,16 +229,17 @@ public class PlayerPerformancePanel extends JPanel {
 		return -1;
 	}
 
-	// allow controller to access comment box
+	// Return the comment text area so the controller can update it
 	public JTextArea getTxtComments() {
 		return txtComments;
 	}
 
+	// Tells the view whether data is ready to load
 	public void setUploadPlayers(boolean upload) {
 		this.uploadPlayers = upload;
 	}
 	
-	
+	// Clear the table content
 	public void clearTable() {
 		String[] columnNames = {"Skill Name"}; 
 	    Object[][] emptyData = {};
@@ -246,16 +247,16 @@ public class PlayerPerformancePanel extends JPanel {
 	    table.setModel(emptyModel);
 	}
 	
+	// Clear the comment box
 	public void clearComment() {
 		txtComments.setText(" ");
 	}
 	
+	// Reset everything: table, comments, and selected player
 	public void reset() {
 	    clearTable();
 	    clearComment();
 	    cmbPlayers.setSelectedIndex(-1); 
 	}
-
-
 }
 

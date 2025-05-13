@@ -23,6 +23,13 @@ import javax.swing.border.EmptyBorder;
 import simpleRugby.controler.RegisterController;
 import simpleRugby.model.StaffRole;
 
+
+/**
+ * This panel intend to allow new users to register in the system.
+ * It should collect basic information like name, email, password, etc.
+ * and passes it to the controller to handle the logic.
+ * Its not fully operational
+ */
 public class RegisterPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -34,7 +41,6 @@ public class RegisterPanel extends JPanel {
 
     public RegisterPanel(RegisterController registerController) {
         this.myRegisterController = registerController;
-        
         
         
         // panel settings

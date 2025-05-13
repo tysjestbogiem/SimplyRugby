@@ -13,25 +13,27 @@ import simpleRugby.model.SessionManager;
 import simpleRugby.model.Skill;
 import simpleRugby.view.PlayerPerformancePanel;
 
+/**
+ * This class handles the logic for player performance.
+ * It connects the PlayerPerformancePanel with the data.
+ */
 public class PlayerPerformanceController {
 	
+	 /**
+     * This is the screen where player performance is shown.
+     */
 	private PlayerPerformancePanel myPlayerPerformancePanel;
 
-	// constructor
+	/**
+     * Constructor that links the controller with its view (the performance panel).
+     */
 	public PlayerPerformanceController(PlayerPerformancePanel myPlayerPerformancePanel) {
-		
 		this.myPlayerPerformancePanel = myPlayerPerformancePanel;
-		
 	}
-
-
-	public PlayerPerformanceController() {
-		// TODO Auto-generated constructor stub
-	}
-
-
+	/**
+     * Loads the players associated with the currently logged-in coach
+     * and fills the combo box on the panel.     */
 	public void displayPlayers() {
-    	
     	int loggedUserId = SessionManager.getUserId();
     	List<Player> players = PlayerPerformanceDAO.getAllPlayers(loggedUserId);
     	myPlayerPerformancePanel.populateCmb(players);
@@ -39,33 +41,36 @@ public class PlayerPerformanceController {
 
     }
 	
+	/**
+     * Loads all skill types from the database and fills the skill dropdown.
+     */
 	public void displaySkills() {
 		List<Skill> skills = PlayerPerformanceDAO.getAllSkills();
 		myPlayerPerformancePanel.populateSkillCmb(skills);
 	}
 	
 	
-	
+	/**
+     * Builds a table model to show skill performance data.
+     */
 	public DefaultTableModel getTableModelForSkills(List<Skill> skillList, Map<String, Double> avgScores) {
 
-	    // get dates
+	    // Get dates
 	    List<String> dateColumns = new ArrayList<>();
 	    for (Skill skill : skillList) {
-	        String date = skill.getTrainingDateChanged().toString();
+	        String date = skill.getTrainingDateChanged();
 	        if (!dateColumns.contains(date)) {
 	            dateColumns.add(date);
 	        }
 	    }
 	    
-	    // get skill names
-	    List<String> skillNames = new ArrayList<>();
-	    for (Skill skill : skillList) {
-	        if (!skillNames.contains(skill.getSkillName())) {
-	            skillNames.add(skill.getSkillName());
-	        }
-	    }
+	    // List of skills in order
+	    List<String> skillNames = List.of(
+	        "Standard", "Spin", "Pop", "Front", "Rear",
+	        "Side", "Scrabble", "Drop", "Punt", "Grubber", "Goal"
+	    );
 	    
-	    // get column names: first column "skill name", then dates
+	    // Get column names: first column "skill name", then dates
 	    String[] columnNames = new String[dateColumns.size() + 2];
 	    columnNames[0] = "Skill Name"; // first column is "skill name"
 	    // add average score here????
@@ -74,7 +79,7 @@ public class PlayerPerformanceController {
 	    }
 	    columnNames[columnNames.length - 1] = "Average";
 	    
-	    // create new model
+	    // Create new model
 	    DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 	    
 	    // 5fill rows with skill names
@@ -107,7 +112,9 @@ public class PlayerPerformanceController {
 	    return model;
 	}
 	
-	
+	/**
+     * Loads skill data for the selected player and updates the table on the view.
+     */
 	public void loadTable() {
 	    int selectedPlayerId = myPlayerPerformancePanel.getSelectedPlayerId(); // get player from cmb box
 	    
@@ -124,6 +131,9 @@ public class PlayerPerformanceController {
 	    }
 	}
 	
+	/**
+     * Displays all skill-related comments for the selected player.
+     */
 	public void displayComments() {
 	    int selectedPlayerId = myPlayerPerformancePanel.getSelectedPlayerId(); // get player from cmb box
 

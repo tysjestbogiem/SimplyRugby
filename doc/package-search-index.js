@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"config"},{"l":"simpleRugby"},{"l":"simpleRugby.controler"},{"l":"simpleRugby.model"},{"l":"simpleRugby.view"}];updateSearchResults();

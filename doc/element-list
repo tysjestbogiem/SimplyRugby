@@ -1,0 +1,5 @@
+config
+simpleRugby
+simpleRugby.controler
+simpleRugby.model
+simpleRugby.view
